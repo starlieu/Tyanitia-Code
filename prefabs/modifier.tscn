@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bgefng37yvefu"]
+
+[ext_resource type="Texture2D" uid="uid://6ptjvvnn8jhm" path="res://user/skins/default/modifiers/nofail.png" id="1_5jmju"]
+
+[node name="Modifier" type="Sprite3D" unique_id=1238434581]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -8.5, -10)
+modulate = Color(1, 1, 1, 0.376471)
+double_sided = false
+no_depth_test = true
+texture = ExtResource("1_5jmju")

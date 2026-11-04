@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://rtjc1qqejweq"]
+
+[ext_resource type="Script" uid="uid://favqe4rxd6ab" path="res://scripts/spaces/TriTunnel.cs" id="1_rc2qo"]
+[ext_resource type="ArrayMesh" uid="uid://ciinqk13a1vmt" path="res://meshes/tunnel.obj" id="2_mwi80"]
+
+[sub_resource type="Environment" id="2"]
+background_mode = 1
+
+[sub_resource type="StandardMaterial3D" id="1"]
+transparency = 1
+depth_draw_mode = 1
+shading_mode = 0
+proximity_fade_distance = 12.91
+distance_fade_mode = 1
+distance_fade_min_distance = 65.0
+stencil_flags = 2
+stencil_outline_thickness = 0.318
+
+[node name="tritunnel" type="Node3D" unique_id=1217308280]
+script = ExtResource("1_rc2qo")
+
+[node name="env" type="WorldEnvironment" parent="." unique_id=684406377]
+environment = SubResource("2")
+
+[node name="Tunnel" type="MeshInstance3D" parent="." unique_id=1681185934]
+transform = Transform3D(-8.742278e-09, 0, -0.2, 0, 0.2, 0, 0.2, 0, -8.742278e-09, 0, 0, 0)
+material_override = SubResource("1")
+transparency = 0.75
+cast_shadow = 0
+mesh = ExtResource("2_mwi80")

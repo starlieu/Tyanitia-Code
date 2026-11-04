@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://kwoco4d2gdqc"]
+
+[ext_resource type="Theme" uid="uid://dhuhu3mmaew1a" path="res://themes/theme.tres" id="1_gwvkv"]
+[ext_resource type="Texture2D" uid="uid://baivqqkfll133" path="res://textures/TyanitiaSquircle.png" id="2_8u46y"]
+[ext_resource type="Script" uid="uid://h6kj5lg88s0o" path="res://scripts/ui/menu/play/SpeedPresetButton.cs" id="3_46ere"]
+
+[node name="SpeedPresetButton" type="Button" unique_id=970055812]
+custom_minimum_size = Vector2(0, 32)
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("1_gwvkv")
+theme_override_constants/icon_max_width = 32
+toggle_mode = true
+icon = ExtResource("2_8u46y")
+icon_alignment = 1
+script = ExtResource("3_46ere")

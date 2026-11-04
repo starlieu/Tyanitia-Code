@@ -1,0 +1,1266 @@
+[gd_scene format=3 uid="uid://vp1nmsiqt5yv"]
+
+[ext_resource type="Script" uid="uid://dly10tvxguvhb" path="res://scripts/scenes/Game.cs" id="1_m4url"]
+[ext_resource type="Script" uid="uid://bxncinhblsjgg" path="res://scripts/game/managers/CursorManager.cs" id="2_nepv3"]
+[ext_resource type="Texture2D" uid="uid://b3g4aw54n6bow" path="res://user/skins/default/game/grid.png" id="2_q78ea"]
+[ext_resource type="Script" uid="uid://dp8nga2aot1n2" path="res://scripts/game/Runner.cs" id="2_qnb83"]
+[ext_resource type="Script" uid="uid://bxwlotp5vcjux" path="res://scripts/game/managers/ReplayManager.cs" id="2_twgab"]
+[ext_resource type="Script" uid="uid://c6nlc0umyu342" path="res://scripts/game/renderers/TrailRenderer.cs" id="3_7025r"]
+[ext_resource type="Texture2D" uid="uid://3e1tjlr4m0wt" path="res://user/skins/default/game/cursor.png" id="3_negii"]
+[ext_resource type="Script" uid="uid://n6n303pw3qbd" path="res://scripts/game/managers/HudManager.cs" id="3_sww3w"]
+[ext_resource type="Script" uid="uid://cqqaf7cwx5ty1" path="res://scripts/game/ui/HealthBar.cs" id="4_js0lu"]
+[ext_resource type="Theme" uid="uid://dhuhu3mmaew1a" path="res://themes/theme.tres" id="4_rvp5o"]
+[ext_resource type="FontFile" uid="uid://4bnnn01f4dqr" path="res://fonts/Ubuntu/Ubuntu-Medium.ttf" id="5_pxgh4"]
+[ext_resource type="Texture2D" uid="uid://cxv6ey5xb6b0f" path="res://user/skins/default/game/health_background.png" id="6_bbly8"]
+[ext_resource type="Script" uid="uid://dbyc4etv31aub" path="res://scripts/game/ui/ProgressBar.cs" id="7_gxtfn"]
+[ext_resource type="Texture2D" uid="uid://4x2vfpyjkri6" path="res://user/skins/default/game/health.png" id="7_wjg6i"]
+[ext_resource type="Texture2D" uid="uid://dmc5f6ajp8xv1" path="res://user/skins/default/game/progress_background.png" id="8_eu3ux"]
+[ext_resource type="Script" uid="uid://dv0gni2j4t686" path="res://scripts/game/ui/PanelLeft.cs" id="8_qnb83"]
+[ext_resource type="Texture2D" uid="uid://d3s17ehomjscd" path="res://user/skins/default/game/progress.png" id="9_nde5v"]
+[ext_resource type="Texture2D" uid="uid://80bitp5weqrb" path="res://user/skins/default/game/panel_left_background.png" id="11_sdncv"]
+[ext_resource type="FontFile" uid="uid://b6hgjef6s6oly" path="res://fonts/Comfortaa/Comfortaa-Bold.ttf" id="12_axsek"]
+[ext_resource type="Texture2D" uid="uid://ccdaf14yq65jf" path="res://user/skins/default/game/grid_guides.png" id="12_pr1ej"]
+[ext_resource type="Texture2D" uid="uid://diba7c3s8as4s" path="res://user/skins/default/game/panel_right_background.png" id="12_whe6p"]
+[ext_resource type="Texture2D" uid="uid://dw2gxd3m24h4m" path="res://user/skins/default/game/hits.png" id="13_6rhgc"]
+[ext_resource type="Script" uid="uid://c3gf0hgrqqqx5" path="res://scripts/game/ui/PanelRight.cs" id="13_sww3w"]
+[ext_resource type="Shader" uid="uid://bp2sv5ynsubi2" path="res://scripts/shaders/alpha_gradient.gdshader" id="14_3xchs"]
+[ext_resource type="Texture2D" uid="uid://c3x2cp3tx4vqt" path="res://user/skins/default/game/misses.png" id="14_bqf11"]
+[ext_resource type="Shader" uid="uid://bx4888tau78tk" path="res://scripts/shaders/combo_progress.gdshader" id="14_y51pe"]
+[ext_resource type="FontFile" uid="uid://dhyog1pif7c5i" path="res://fonts/Nunito/Nunito-Bold.ttf" id="20_pr1ej"]
+[ext_resource type="Script" uid="uid://0boi2mqa8488" path="res://scripts/game/ui/Combo.cs" id="20_suyxu"]
+[ext_resource type="FontFile" uid="uid://b0ru0lfde5a21" path="res://fonts/Nunito/Nunito-SemiBold.ttf" id="21_05nbr"]
+[ext_resource type="Script" uid="uid://cmmf22opvqenp" path="res://scripts/game/ui/Progress.cs" id="21_twgab"]
+[ext_resource type="Script" uid="uid://bjc8qp66nisos" path="res://scripts/game/ui/Title.cs" id="22_02fa5"]
+[ext_resource type="Texture2D" uid="uid://lfj8i1bi6kfs" path="res://textures/ui/pause.png" id="23_7silw"]
+[ext_resource type="FontFile" uid="uid://dotb3skhwouha" path="res://fonts/Roboto/Roboto-Bold.ttf" id="23_wf21h"]
+[ext_resource type="FontFile" uid="uid://rs2mb33nd3b1" path="res://fonts/Roboto/Roboto-Italic.ttf" id="24_j6p10"]
+[ext_resource type="Script" uid="uid://dhrqgv44b65ls" path="res://scripts/game/ui/Skip.cs" id="25_nepv3"]
+[ext_resource type="Script" uid="uid://ddtnij8m4eipl" path="res://scripts/game/ui/Grid.cs" id="27_js0lu"]
+[ext_resource type="Script" uid="uid://b7jvxorkr4xfi" path="res://scripts/game/ui/Speed.cs" id="28_gxtfn"]
+[ext_resource type="Texture2D" uid="uid://b0k0ltu15bart" path="res://user/skins/default/modifiers/nofail.png" id="34_8ool0"]
+[ext_resource type="Script" uid="uid://cvaggwr3rrenl" path="res://scripts/game/renderers/NoteRenderer.cs" id="34_pr1ej"]
+[ext_resource type="Texture2D" uid="uid://bc0w1ujoshiyk" path="res://user/skins/default/game/visibility_assist.png" id="36_05nbr"]
+[ext_resource type="Script" uid="uid://c8d872aoiqglo" path="res://scripts/PlayerInputController.cs" id="37_02fa5"]
+[ext_resource type="Script" uid="uid://dlxxg2h4cl5hj" path="res://scripts/game/ui/PauseMenu.cs" id="38_8ool0"]
+[ext_resource type="Script" uid="uid://c24b7vefbxvbh" path="res://scripts/game/ui/PlaytestOverlay.cs" id="40_m4url"]
+[ext_resource type="Script" path="res://scripts/game/ui/MobileGameControls.cs" id="mobile_controls"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a6jk1"]
+resource_name = "Material"
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("2_q78ea")
+texture_repeat = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_aih2q"]
+material = SubResource("StandardMaterial3D_a6jk1")
+size = Vector2(4, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lvhmj"]
+transparency = 1
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_texture = ExtResource("3_negii")
+texture_filter = 5
+texture_repeat = false
+distance_fade_min_distance = 1076.07
+
+[sub_resource type="QuadMesh" id="QuadMesh_xij4d"]
+material = SubResource("StandardMaterial3D_lvhmj")
+size = Vector2(0.263, 0.263)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ssr8x"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+disable_fog = true
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("13_6rhgc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_5p2n8"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_e28va"]
+transform_format = 1
+use_colors = true
+mesh = SubResource("QuadMesh_5p2n8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_05nbr"]
+resource_name = "Material"
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("12_pr1ej")
+texture_repeat = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_0sl42"]
+material = SubResource("StandardMaterial3D_05nbr")
+size = Vector2(4, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rc4du"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("36_05nbr")
+
+[sub_resource type="QuadMesh" id="QuadMesh_oaba0"]
+material = SubResource("StandardMaterial3D_rc4du")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_pl11u"]
+viewport_path = NodePath("Runner/HUD/Health/HealthViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4p8vu"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+disable_fog = true
+albedo_texture = SubResource("ViewportTexture_pl11u")
+texture_repeat = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_b1hbo"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_4p8vu")
+size = Vector2(10.88, 0.8)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_sww3w"]
+viewport_path = NodePath("Runner/HUD/PanelLeft/PanelLeftViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nody0"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+disable_fog = true
+albedo_texture = SubResource("ViewportTexture_sww3w")
+texture_repeat = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_ssyve"]
+size = Vector2(4, 10)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x2xye"]
+shader = ExtResource("14_y51pe")
+shader_parameter/progress = 0.8870000421325
+shader_parameter/colour = Color(1, 1, 1, 1)
+shader_parameter/background_colour = Color(0.155, 0.155, 0.155, 1)
+shader_parameter/sides = 8
+shader_parameter/thickness = 3.0
+shader_parameter/size = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56f8v"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_usmyc"]
+font = ExtResource("20_pr1ej")
+font_size = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_pr1ej"]
+font = ExtResource("21_05nbr")
+font_size = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_pause_counter_title"]
+font = ExtResource("21_05nbr")
+font_size = 50
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_suyxu"]
+viewport_path = NodePath("Runner/HUD/PanelRight/PanelRightViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ro5ir"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+disable_fog = true
+albedo_texture = SubResource("ViewportTexture_suyxu")
+texture_repeat = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_5bid2"]
+font = ExtResource("21_05nbr")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_v63ri"]
+font = ExtResource("21_05nbr")
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_g4ffu"]
+font = ExtResource("21_05nbr")
+font_size = 50
+font_color = Color(1, 1, 1, 0.768627)
+
+[sub_resource type="LabelSettings" id="LabelSettings_s1j5a"]
+font = ExtResource("21_05nbr")
+font_size = 50
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gc8yu"]
+shader = ExtResource("14_3xchs")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bhx41"]
+viewport_path = NodePath("Runner/HUD/ProgressBar/ProgressBarViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1h21"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+disable_fog = true
+albedo_texture = SubResource("ViewportTexture_bhx41")
+texture_repeat = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_7mook"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_p1h21")
+size = Vector2(10.88, 0.8)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qnb83"]
+viewport_path = NodePath("Runner/Video/VideoViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rj3ky"]
+resource_local_to_scene = true
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_texture = SubResource("ViewportTexture_qnb83")
+texture_filter = 1
+texture_repeat = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_3p7x2"]
+size = Vector2(258.3, 210)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d5aou"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_r7xjp"]
+font = ExtResource("12_axsek")
+font_size = 18
+font_color = Color(1, 1, 1, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sijr0"]
+bg_color = Color(0, 0, 0, 0.8784314)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_a70tm"]
+font_color = Color(1, 1, 1, 0.25098)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pwlqp"]
+font = ExtResource("23_wf21h")
+font_size = 48
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kncke"]
+bg_color = Color(0.0352941, 0.0313726, 0.0509804, 0.501961)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6kbgk"]
+bg_color = Color(0.0352941, 0.0313726, 0.0509804, 0.501961)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jlnvv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y08lf"]
+bg_color = Color(0.0745098, 0.0666667, 0.101961, 0.501961)
+
+[sub_resource type="Theme" id="Theme_e1j6l"]
+Button/fonts/font = ExtResource("5_pxgh4")
+Button/styles/focus = SubResource("StyleBoxFlat_kncke")
+Button/styles/hover = SubResource("StyleBoxFlat_6kbgk")
+Button/styles/normal = SubResource("StyleBoxEmpty_jlnvv")
+Button/styles/pressed = SubResource("StyleBoxFlat_y08lf")
+
+[sub_resource type="LabelSettings" id="LabelSettings_tjduq"]
+font = ExtResource("24_j6p10")
+font_size = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mobile_controls"]
+bg_color = Color(0.025, 0.07, 0.08, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.88, 0.8, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="SceneGame" type="Node" unique_id=909809067 node_paths=PackedStringArray("Runner", "Menu", "PlaytestOverlay", "ReplayManager", "PlayerInputController", "CursorManager")]
+script = ExtResource("1_m4url")
+Runner = NodePath("Runner")
+Menu = NodePath("Menu")
+PlaytestOverlay = NodePath("PlaytestOverlay")
+ReplayManager = NodePath("ReplayManager")
+PlayerInputController = NodePath("PlayerInputController")
+CursorManager = NodePath("CursorManager")
+UseGameSpace = true
+AddSpaceAsChild = true
+
+[node name="CursorManager" type="Node" parent="." unique_id=862696440 node_paths=PackedStringArray("runner", "playerInputController", "replayManager", "cursorMesh", "camera")]
+script = ExtResource("2_nepv3")
+runner = NodePath("../Runner")
+playerInputController = NodePath("../PlayerInputController")
+replayManager = NodePath("../ReplayManager")
+cursorMesh = NodePath("../Runner/HUD/Grid/Cursor")
+camera = NodePath("../Runner/Camera3D")
+
+[node name="TrailRenderer" type="Node" parent="CursorManager" unique_id=2058712869 node_paths=PackedStringArray("cursor", "cursorTrail", "runner")]
+script = ExtResource("3_7025r")
+cursor = NodePath("../../Runner/HUD/Grid/Cursor")
+cursorTrail = NodePath("../../Runner/HUD/Grid/CursorTrail")
+runner = NodePath("../../Runner")
+
+[node name="PlayerInputController" type="Node" parent="." unique_id=340777835]
+script = ExtResource("37_02fa5")
+
+[node name="ReplayManager" type="Node" parent="." unique_id=40137833 node_paths=PackedStringArray("Runner", "ReplayViewer", "CursorManager")]
+script = ExtResource("2_twgab")
+Runner = NodePath("../Runner")
+ReplayViewer = NodePath("../ReplayViewer")
+CursorManager = NodePath("../CursorManager")
+
+[node name="Runner" type="Node3D" parent="." unique_id=580620214 node_paths=PackedStringArray("HudManager", "Camera", "Renderers", "Grid", "Cursor")]
+script = ExtResource("2_qnb83")
+HudManager = NodePath("HUD")
+Camera = NodePath("Camera3D")
+Renderers = [NodePath("Renderers/Notes")]
+Grid = NodePath("HUD/Grid")
+Cursor = NodePath("HUD/Grid/Cursor")
+
+[node name="HUD" type="Node3D" parent="Runner" unique_id=1234434255 node_paths=PackedStringArray("Runner")]
+script = ExtResource("3_sww3w")
+Runner = NodePath("..")
+
+[node name="Grid" type="MeshInstance3D" parent="Runner/HUD" unique_id=730517176]
+mesh = SubResource("QuadMesh_aih2q")
+skeleton = NodePath("../../..")
+script = ExtResource("27_js0lu")
+
+[node name="Cursor" type="MeshInstance3D" parent="Runner/HUD/Grid" unique_id=292067677]
+mesh = SubResource("QuadMesh_xij4d")
+skeleton = NodePath("../../../..")
+
+[node name="CursorTrail" type="MultiMeshInstance3D" parent="Runner/HUD/Grid" unique_id=913051903]
+material_override = SubResource("StandardMaterial3D_ssr8x")
+multimesh = SubResource("MultiMesh_e28va")
+
+[node name="GridGuides" type="MeshInstance3D" parent="Runner/HUD/Grid" unique_id=2145859938]
+transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, -0.2)
+visible = false
+mesh = SubResource("QuadMesh_0sl42")
+skeleton = NodePath("../../../..")
+
+[node name="VisibilityAssist" type="MeshInstance3D" parent="Runner/HUD/Grid" unique_id=613600632]
+transform = Transform3D(300, 0, 0, 0, 300, 0, 0, 0, 300, 0, 0, -140)
+transparency = 0.25
+mesh = SubResource("QuadMesh_oaba0")
+skeleton = NodePath("../..")
+
+[node name="Health" type="MeshInstance3D" parent="Runner/HUD" unique_id=449857227]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -6.3, -10)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_b1hbo")
+skeleton = NodePath("../../..")
+script = ExtResource("4_js0lu")
+
+[node name="HealthViewport" type="SubViewport" parent="Runner/HUD/Health" unique_id=1637011839]
+disable_3d = true
+transparent_bg = true
+canvas_item_default_texture_filter = 2
+size = Vector2i(544, 40)
+size_2d_override = Vector2i(1088, 80)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="Background" type="TextureRect" parent="Runner/HUD/Health/HealthViewport" unique_id=2016213185]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_bbly8")
+
+[node name="Main" type="TextureRect" parent="Runner/HUD/Health/HealthViewport" unique_id=366630384]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_wjg6i")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="PanelLeft" type="MeshInstance3D" parent="Runner/HUD" unique_id=2045187203]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -7.5, 0, -9)
+material_override = SubResource("StandardMaterial3D_nody0")
+mesh = SubResource("QuadMesh_ssyve")
+skeleton = NodePath("../../..")
+script = ExtResource("8_qnb83")
+
+[node name="PanelLeftViewport" type="SubViewport" parent="Runner/HUD/PanelLeft" unique_id=944518522]
+disable_3d = true
+transparent_bg = true
+canvas_item_default_texture_filter = 2
+size = Vector2i(250, 625)
+
+[node name="Background" type="TextureRect" parent="Runner/HUD/PanelLeft/PanelLeftViewport" unique_id=1374853699]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_sdncv")
+
+[node name="MultiplierProgress" type="Panel" parent="Runner/HUD/PanelLeft/PanelLeftViewport" unique_id=1067613329]
+clip_children = 2
+material = SubResource("ShaderMaterial_x2xye")
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.65
+anchor_right = 0.5
+anchor_bottom = 0.65
+offset_left = -128.0
+offset_top = -128.0
+offset_right = 128.0
+offset_bottom = 128.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_56f8v")
+
+[node name="Score" type="Label" parent="Runner/HUD/PanelLeft/PanelLeftViewport" unique_id=1330190508]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.35
+anchor_right = 0.5
+anchor_bottom = 0.35
+offset_left = -14.5
+offset_top = -28.5
+offset_right = 14.5
+offset_bottom = 28.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_rvp5o")
+text = "0"
+label_settings = SubResource("LabelSettings_usmyc")
+horizontal_alignment = 1
+
+[node name="Multiplier" type="Label" parent="Runner/HUD/PanelLeft/PanelLeftViewport" unique_id=1660490363]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.65
+anchor_right = 0.5
+anchor_bottom = 0.65
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_rvp5o")
+text = "1x"
+label_settings = SubResource("LabelSettings_pr1ej")
+horizontal_alignment = 1
+
+[node name="ComboCount" type="Label" parent="Runner/HUD/PanelLeft/PanelLeftViewport" unique_id=531787894]
+visible = false
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.86
+anchor_right = 0.5
+anchor_bottom = 0.86
+offset_left = -90.0
+offset_top = -18.0
+offset_right = 90.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+label_settings = SubResource("LabelSettings_pause_counter_title")
+horizontal_alignment = 1
+
+[node name="PanelRight" type="MeshInstance3D" parent="Runner/HUD" unique_id=1993445313]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 7.5, 0, -9)
+material_override = SubResource("StandardMaterial3D_ro5ir")
+mesh = SubResource("QuadMesh_ssyve")
+skeleton = NodePath("../../..")
+script = ExtResource("13_sww3w")
+
+[node name="PanelRightViewport" type="SubViewport" parent="Runner/HUD/PanelRight" unique_id=623021244]
+process_mode = 3
+disable_3d = true
+transparent_bg = true
+canvas_item_default_texture_filter = 2
+size = Vector2i(250, 625)
+
+[node name="Background" type="TextureRect" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=1856482217]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_whe6p")
+
+[node name="Accuracy" type="Label" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=1669266042]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.35
+anchor_right = 0.5
+anchor_bottom = 0.35
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_rvp5o")
+text = "100.00%"
+label_settings = SubResource("LabelSettings_usmyc")
+horizontal_alignment = 1
+
+[node name="Hits" type="Label" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=2096630009]
+modulate = Color(1, 1, 1, 0.627451)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.625
+anchor_right = 0.5
+anchor_bottom = 0.625
+offset_right = -25.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("4_rvp5o")
+text = "0"
+label_settings = SubResource("LabelSettings_5bid2")
+horizontal_alignment = 2
+
+[node name="Misses" type="Label" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=1379241442]
+modulate = Color(1, 1, 1, 0.627451)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.625
+anchor_right = 0.5
+anchor_bottom = 0.625
+offset_left = 25.0
+offset_bottom = -4.0
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("4_rvp5o")
+text = "0"
+label_settings = SubResource("LabelSettings_v63ri")
+
+[node name="SimpleMisses" type="Label" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=1871751782]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("4_rvp5o")
+text = "0"
+label_settings = SubResource("LabelSettings_g4ffu")
+
+[node name="Sum" type="Label" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=150248329]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.7
+anchor_right = 0.5
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("4_rvp5o")
+text = "0"
+label_settings = SubResource("LabelSettings_s1j5a")
+horizontal_alignment = 1
+
+[node name="HitsIcon" type="TextureRect" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=482771805]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.625
+anchor_right = 0.5
+anchor_bottom = 0.625
+offset_top = -12.0
+offset_right = -2.0
+offset_bottom = 7.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("4_rvp5o")
+texture = ExtResource("13_6rhgc")
+expand_mode = 2
+
+[node name="MissesIcon" type="TextureRect" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=901292564]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.625
+anchor_right = 0.5
+anchor_bottom = 0.625
+offset_left = 2.0
+offset_top = -12.0
+offset_bottom = 7.0
+grow_vertical = 2
+theme = ExtResource("4_rvp5o")
+texture = ExtResource("14_bqf11")
+expand_mode = 2
+
+[node name="Line" type="ColorRect" parent="Runner/HUD/PanelRight/PanelRightViewport" unique_id=629344643]
+material = SubResource("ShaderMaterial_gc8yu")
+anchors_preset = -1
+anchor_top = 0.65
+anchor_right = 1.0
+anchor_bottom = 0.65
+offset_left = 140.0
+offset_right = -16.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProgressBar" type="MeshInstance3D" parent="Runner/HUD" unique_id=528447019]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 6.3, -10)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_7mook")
+skeleton = NodePath("../../..")
+script = ExtResource("7_gxtfn")
+
+[node name="ProgressBarViewport" type="SubViewport" parent="Runner/HUD/ProgressBar" unique_id=658400463]
+disable_3d = true
+transparent_bg = true
+canvas_item_default_texture_filter = 2
+size = Vector2i(544, 40)
+size_2d_override = Vector2i(1088, 80)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="Background" type="TextureRect" parent="Runner/HUD/ProgressBar/ProgressBarViewport" unique_id=1129572664]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_eu3ux")
+
+[node name="Main" type="TextureRect" parent="Runner/HUD/ProgressBar/ProgressBarViewport" unique_id=2016165310]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_nde5v")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Progress" type="Node3D" parent="Runner/HUD" unique_id=533288593]
+script = ExtResource("21_twgab")
+
+[node name="Label" type="Label3D" parent="Runner/HUD/Progress" unique_id=496335082]
+transform = Transform3D(3.5, 0, 0, 0, 3.38074, -0.905867, 0, 0.905867, 3.38074, 0, 7, -10)
+pixel_size = 0.0025
+modulate = Color(1, 1, 1, 0.74509805)
+outline_modulate = Color(0, 0, 0, 0)
+text = "0:00 / 0:00"
+font = ExtResource("21_05nbr")
+font_size = 64
+
+[node name="Title" type="Node3D" parent="Runner/HUD" unique_id=1847012801]
+script = ExtResource("22_02fa5")
+
+[node name="Label" type="Label3D" parent="Runner/HUD/Title" unique_id=841289409]
+transform = Transform3D(2, 0, 0, 0, 1.93185, -0.517638, 0, 0.517638, 1.93185, 0, 8.25, -10)
+outline_modulate = Color(0, 0, 0, 0)
+text = "N/A - N/A"
+font = ExtResource("20_pr1ej")
+font_size = 64
+autowrap_mode = 3
+width = 2500.0
+
+[node name="Combo" type="Node3D" parent="Runner/HUD" unique_id=2131933661]
+script = ExtResource("20_suyxu")
+
+[node name="Label" type="Label3D" parent="Runner/HUD/Combo" unique_id=1330017059]
+transform = Transform3D(7, 0, 0, 0, 6.89365, -1.21554, 0, 1.21554, 6.89365, 0, 3.5, -10)
+pixel_size = 0.0025
+modulate = Color(1, 1, 1, 0)
+outline_modulate = Color(1, 1, 1, 0.39215687)
+text = "0"
+font = ExtResource("5_pxgh4")
+font_size = 64
+outline_size = 4
+
+[node name="Speed" type="Node3D" parent="Runner/HUD" unique_id=267334765]
+transform = Transform3D(7, 0, 0, 0, 6.76148, 1.81173, 0, -1.81173, 6.76148, 0, -7.5, -10)
+script = ExtResource("28_gxtfn")
+
+[node name="Label" type="Label3D" parent="Runner/HUD/Speed" unique_id=1294863906]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
+pixel_size = 0.0025
+modulate = Color(1, 1, 1, 0.39215687)
+outline_modulate = Color(0, 0, 0, 0)
+text = "1.00x"
+font = ExtResource("21_05nbr")
+
+[node name="Skip" type="Node3D" parent="Runner/HUD" unique_id=1658610942]
+script = ExtResource("25_nepv3")
+
+[node name="Label" type="Label3D" parent="Runner/HUD/Skip" unique_id=1231864437]
+transform = Transform3D(7, 0, 0, 0, 6.76148, 1.81173, 0, -1.81173, 6.76148, 0, -5, -10)
+pixel_size = 0.0025
+modulate = Color(1, 1, 1, 0)
+outline_modulate = Color(0, 0, 0, 0)
+text = "Press Space to skip"
+font = ExtResource("21_05nbr")
+
+[node name="TemplateModifier" type="Sprite3D" parent="Runner/HUD" unique_id=1238434581]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, -8.5, -10)
+visible = false
+modulate = Color(1, 1, 1, 0.376471)
+double_sided = false
+no_depth_test = true
+texture = ExtResource("34_8ool0")
+
+[node name="Renderers" type="Node3D" parent="Runner" unique_id=561265512]
+
+[node name="Notes" type="Node3D" parent="Runner/Renderers" unique_id=572155712 node_paths=PackedStringArray("runner")]
+script = ExtResource("34_pr1ej")
+runner = NodePath("../..")
+
+[node name="Camera3D" type="Camera3D" parent="Runner" unique_id=112686709]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.75)
+current = true
+fov = 70.0
+size = 5.0
+
+[node name="Video" type="MeshInstance3D" parent="Runner" unique_id=1036410191]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.479675, -0.459572, -99.9929)
+visible = false
+material_override = SubResource("StandardMaterial3D_rj3ky")
+transparency = 1.0
+cast_shadow = 0
+mesh = SubResource("QuadMesh_3p7x2")
+skeleton = NodePath("../..")
+
+[node name="VideoViewport" type="SubViewport" parent="Runner/Video" unique_id=866766269]
+transparent_bg = true
+canvas_item_default_texture_filter = 2
+size = Vector2i(1920, 1080)
+
+[node name="QuitOverlay" type="Panel" parent="." unique_id=316579954]
+visible = false
+modulate = Color(1, 1, 1, 0)
+z_index = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_d5aou")
+
+[node name="Holder" type="VBoxContainer" parent="QuitOverlay" unique_id=289008022]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 20.0
+offset_right = 150.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="QuitOverlay/Holder" unique_id=1425722822]
+layout_mode = 2
+text = "Hold R to Quit"
+label_settings = SubResource("LabelSettings_r7xjp")
+horizontal_alignment = 1
+
+[node name="ProgressBackground" type="ColorRect" parent="QuitOverlay/Holder" unique_id=372914467]
+custom_minimum_size = Vector2(300, 8)
+layout_mode = 2
+color = Color(0.28, 0.28, 0.28, 0.75)
+
+[node name="ProgressBar" type="ColorRect" parent="QuitOverlay/Holder/ProgressBackground" unique_id=541280931]
+layout_mode = 0
+offset_bottom = 8.0
+color = Color(0.54, 0.54, 0.54, 0.82)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1797381631]
+visible = false
+z_index = -1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=671564774]
+transparent_bg = true
+handle_input_locally = false
+screen_space_aa = 1
+size = Vector2i(1280, 720)
+render_target_update_mode = 0
+
+[node name="ReplayViewer" type="Panel" parent="." unique_id=1117476839]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -84.0
+offset_right = -32.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sijr0")
+
+[node name="OrthogonalPanel" type="Panel" parent="ReplayViewer" unique_id=816223519]
+light_mask = 512
+visibility_layer = 512
+z_index = -1
+z_as_relative = false
+layout_mode = 1
+offset_left = -5.0
+offset_top = -310.0
+offset_right = 259.0
+offset_bottom = -46.0
+offset_transform_enabled = true
+offset_transform_pivot_ratio = Vector2(1, 1)
+offset_transform_visual_only = false
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sijr0")
+
+[node name="OrthogonalCamera" type="SubViewportContainer" parent="ReplayViewer/OrthogonalPanel" unique_id=468959325]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -152.0
+offset_top = -152.0
+offset_right = 104.0
+offset_bottom = 104.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.2, 1.2)
+offset_transform_enabled = true
+
+[node name="SubViewport" type="SubViewport" parent="ReplayViewer/OrthogonalPanel/OrthogonalCamera" unique_id=559747074]
+transparent_bg = true
+handle_input_locally = false
+scaling_3d_mode = 5
+size = Vector2i(256, 256)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="ReplayViewer/OrthogonalPanel/OrthogonalCamera/SubViewport" unique_id=1970241273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.60892284)
+top_level = true
+projection = 1
+size = 4.5
+far = 139.0
+
+[node name="Tip" type="Label" parent="ReplayViewer" unique_id=919285545]
+layout_mode = 1
+anchors_preset = -1
+offset_right = 40.0
+grow_vertical = 0
+text = "Press F2 to hide replay UI, F3 to hide orthogonal camera, F to toggle note fade out, P to toggle note pushback"
+label_settings = SubResource("LabelSettings_a70tm")
+
+[node name="Time" type="Label" parent="ReplayViewer" unique_id=1277133470]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 12.0
+offset_right = 164.0
+offset_bottom = -12.0
+text = "0:00 / 0:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Pause" type="TextureButton" parent="ReplayViewer" unique_id=1677045606]
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_right = 52.0
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("23_7silw")
+stretch_mode = 3
+
+[node name="Seek" type="HSlider" parent="ReplayViewer" unique_id=1706750343]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 192.0
+offset_right = -32.0
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("4_rvp5o")
+max_value = 1.0
+step = 0.0
+ticks_position = 3
+
+[node name="Background" type="Panel" parent="ReplayViewer" unique_id=375982619]
+light_mask = 512
+visibility_layer = 512
+z_index = -1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sijr0")
+
+[node name="NotificationHolder" type="VBoxContainer" parent="." unique_id=1425635507]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -210.0
+offset_top = -110.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+alignment = 2
+
+[node name="Menu" type="Panel" parent="." unique_id=856970091 node_paths=PackedStringArray("game", "runner", "hide", "resume", "restart", "settings", "quit")]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_d5aou")
+script = ExtResource("38_8ool0")
+game = NodePath("..")
+runner = NodePath("../Runner")
+hide = NodePath("Hide")
+resume = NodePath("Holder/Resume")
+restart = NodePath("Holder/Restart")
+settings = NodePath("Holder/Settings")
+quit = NodePath("Holder/Quit")
+
+[node name="Background" type="ColorRect" parent="Menu" unique_id=2094618318]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.25098)
+
+[node name="Hide" type="Button" parent="Menu" unique_id=1826268412]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+button_mask = 3
+flat = true
+
+[node name="Holder" type="Panel" parent="Menu" unique_id=1204474678]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -280.0
+offset_right = 220.0
+offset_bottom = 280.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_sijr0")
+
+[node name="Header" type="Label" parent="Menu/Holder" unique_id=544084605]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.002
+anchor_right = 0.998
+anchor_bottom = 0.21400002
+offset_top = -0.120000005
+offset_right = -0.120025635
+offset_bottom = 0.1599884
+text = "PAUSED"
+label_settings = SubResource("LabelSettings_pwlqp")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Separator" type="ColorRect" parent="Menu/Holder" unique_id=2059385615]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.216
+anchor_right = 1.0
+anchor_bottom = 0.216
+offset_left = 16.0
+offset_top = -0.9600067
+offset_right = -16.0
+offset_bottom = 0.039993286
+grow_horizontal = 2
+color = Color(1, 1, 1, 0.078431375)
+
+[node name="Resume" type="Button" parent="Menu/Holder" unique_id=616429602]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.23400001
+anchor_right = 1.0
+anchor_bottom = 0.384
+offset_left = 1.0
+offset_top = -0.040008545
+offset_right = 1.0
+offset_bottom = -0.040008545
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_e1j6l")
+theme_override_font_sizes/font_size = 28
+text = "RESUME"
+
+[node name="Restart" type="Button" parent="Menu/Holder" unique_id=865082248]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.384
+anchor_right = 1.0
+anchor_bottom = 0.53400004
+offset_top = -0.040008545
+offset_bottom = -0.040008545
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_e1j6l")
+theme_override_font_sizes/font_size = 28
+text = "RESTART"
+
+[node name="Settings" type="Button" parent="Menu/Holder" unique_id=730914507]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.53400004
+anchor_right = 1.0
+anchor_bottom = 0.684
+offset_top = -0.040008545
+offset_bottom = -0.040008545
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_e1j6l")
+theme_override_font_sizes/font_size = 28
+text = "SETTINGS"
+
+[node name="Quit" type="Button" parent="Menu/Holder" unique_id=225658949]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.684
+anchor_right = 1.0
+anchor_bottom = 0.83400005
+offset_top = -0.040008545
+offset_bottom = -0.040039063
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_e1j6l")
+theme_override_font_sizes/font_size = 28
+text = "GIVE UP"
+
+[node name="Separator2" type="ColorRect" parent="Menu/Holder" unique_id=543076678]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.85
+anchor_right = 1.0
+anchor_bottom = 0.85200006
+offset_left = 16.0
+offset_right = -16.0
+offset_bottom = -0.120025635
+grow_horizontal = 2
+color = Color(1, 1, 1, 0.078431375)
+
+[node name="Disclaimer" type="Label" parent="Menu/Holder" unique_id=1874627546]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.85
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -1.7999878
+text = "NOTE: Pausing disqualifies your pass
+[font_size=12][color=ffffffa0] of which you are right now..."
+label_settings = SubResource("LabelSettings_tjduq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menu/Holder" unique_id=1028947402]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.85
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -1.7999878
+focus_mode = 0
+mouse_filter = 2
+bbcode_enabled = true
+text = "NOTE: Pausing disqualifies your pass"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MobileControls" type="Control" parent="." unique_id=702481160 node_paths=PackedStringArray("game", "runner")]
+visible = false
+z_index = 10
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("mobile_controls")
+game = NodePath("..")
+runner = NodePath("../Runner")
+
+[node name="CloseMap" type="Button" parent="MobileControls" unique_id=702481161]
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -104.0
+offset_right = 124.0
+offset_bottom = -8.0
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "Exit map"
+theme = ExtResource("4_rvp5o")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_mobile_controls")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mobile_controls")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mobile_controls")
+text = "EXIT"
+
+[node name="Pause" type="Button" parent="MobileControls" unique_id=702481162]
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = 8.0
+offset_right = 124.0
+offset_bottom = 104.0
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "Pause"
+theme = ExtResource("4_rvp5o")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_mobile_controls")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mobile_controls")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mobile_controls")
+text = "PAUSE"
+
+[node name="Transition" type="ColorRect" parent="." unique_id=784178581]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="PlaytestOverlay" type="Panel" parent="." unique_id=1181132228 node_paths=PackedStringArray("ReplayManager")]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -228.5
+offset_top = -145.75
+offset_right = 228.5
+offset_bottom = 145.75
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("40_m4url")
+ReplayManager = NodePath("../ReplayManager")
+
+[node name="Background" type="ColorRect" parent="PlaytestOverlay" unique_id=946436302]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.8117647)
+
+[node name="VB" type="VBoxContainer" parent="PlaytestOverlay" unique_id=434700085]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -186.41068
+offset_top = -118.875
+offset_right = 186.41068
+offset_bottom = 118.875
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="PlaytestOverlay/VB" unique_id=1440480954]
+layout_mode = 2
+text = "Playtesting Menu"
+horizontal_alignment = 1
+
+[node name="SpinCheck" type="CheckButton" parent="PlaytestOverlay/VB" unique_id=1229643202]
+layout_mode = 2
+text = "Spin"
+
+[node name="StartFrom" type="HBoxContainer" parent="PlaytestOverlay/VB" unique_id=1642958239]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PlaytestOverlay/VB/StartFrom" unique_id=1012996186]
+layout_mode = 2
+text = "Start From"
+
+[node name="VSeparator" type="VSeparator" parent="PlaytestOverlay/VB/StartFrom" unique_id=747816767]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="PlaytestOverlay/VB/StartFrom" unique_id=1472681876]
+layout_mode = 2
+text = "0:00"
+placeholder_text = "0:00"
+alignment = 1
+
+[node name="Speed" type="HBoxContainer" parent="PlaytestOverlay/VB" unique_id=1555509850]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="PlaytestOverlay/VB/Speed" unique_id=473992258]
+layout_mode = 2
+text = "Speed"
+
+[node name="VSeparator" type="VSeparator" parent="PlaytestOverlay/VB/Speed" unique_id=676367974]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="PlaytestOverlay/VB/Speed" unique_id=1063011881]
+layout_mode = 2
+text = "1.0"
+placeholder_text = "1.0"
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="PlaytestOverlay/VB" unique_id=1844474893]
+layout_mode = 2
+text = "Play (Space)"

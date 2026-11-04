@@ -1,0 +1,173 @@
+using System.Collections.Generic;
+using System.Linq;
+using Godot;
+
+public partial class MainMenu : BaseScene
+{
+    public Panel CurrentMenu;
+    public Panel LastMenu;
+
+    public Panel HomeMenu;
+    public Panel PlayMenu;
+    public Panel TopBar;
+    public JukeboxPanel Jukebox;
+    public MapList MapList;
+    public MapInfo MapInfo;
+
+    private Panel menuHolder;
+    private Node topBarButtonsContainer;
+
+    public override void _Ready()
+    {
+        base._Ready();
+
+        menuHolder = GetNode<Panel>("Menus");
+
+        HomeMenu = menuHolder.GetNode<Panel>("Home");
+        PlayMenu = menuHolder.GetNode<Panel>("Play");
+        LastMenu = HomeMenu;
+
+        TopBar = GetNode<Panel>("TopBar");
+        topBarButtonsContainer = TopBar.GetNode("MenuButtons");
+        Jukebox = GetNode<JukeboxPanel>("JukeboxPanel");
+        MapList = PlayMenu.GetNode<MapList>("MapList");
+        MapInfo = PlayMenu.GetNode<MapInfo>("MapInfo");
+
+        CurrentMenu = HomeMenu;
+
+        Input.MouseMode = SettingsManager.Instance.Settings.UseCursorInMenus ? Input.MouseModeEnum.Hidden : Input.MouseModeEnum.Visible;
+
+        List<Node> menuButtons = [];
+        menuButtons.AddRange(topBarButtonsContainer.GetChildren());
+
+        foreach (var container in HomeMenu.GetNode("Buttons").GetChildren())
+        {
+            menuButtons.Add(container.GetChild<Button>(0));
+        }
+
+        foreach (Button button in menuButtons.Cast<Button>())
+        {
+            var menu = (Panel)menuHolder.FindChild(button.Name, false);
+
+            if (menu != null)
+            {
+                button.Pressed += () => Transition(menu);
+            }
+        }
+
+        // Scene-authored button sizes are retained.
+
+        if (MobileUi.IsMobile)
+        {
+            var homeButtons = HomeMenu.GetNode<VBoxContainer>("Buttons");
+            homeButtons.OffsetLeft = 28;
+            homeButtons.OffsetRight = 470;
+            TopBar.CustomMinimumSize = new Vector2(0, 88);
+            TopBar.OffsetBottom = 88;
+            TopBar.GetNode<Control>("Logo").CustomMinimumSize = new Vector2(64, 64);
+            TopBar.GetNode<Control>("Version").AddThemeFontSizeOverride("normal_font_size", 22);
+            TopBar.GetNode<Control>("Version").OffsetLeft = 96;
+        }
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (@event is InputEventMouseButton mouseButton && mouseButton.Pressed)
+        {
+            switch (mouseButton.ButtonIndex)
+            {
+                case MouseButton.Xbutton1:
+                    Transition(HomeMenu);
+                    break;
+                case MouseButton.Xbutton2:
+                    Transition(LastMenu);
+                    break;
+            }
+        }
+    }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (@event is InputEventKey key && key.Pressed)
+        {
+            switch (key.Keycode)
+            {
+                case Key.Escape:
+                    Transition(HomeMenu);
+                    break;
+            }
+        }
+    }
+
+    public override void Load()
+    {
+        base.Load();
+
+        if (OS.GetName() != "Android")
+        {
+            DisplayServer.WindowSetVsyncMode(
+                SettingsManager.Instance.Settings.VSyncMenus ? DisplayServer.VSyncMode.Adaptive : DisplayServer.VSyncMode.Disabled
+            );
+        }
+
+        // Apply any map selection that was deferred while menu was off-tree (e.g. import from another scene)
+        MapInfo.ApplyPendingSelection();
+
+        MapInfo.InfoContainer?.Refresh();
+        SceneManager.Space?.UpdateState(false);
+
+        var map = MapManager.Selected.Value;
+
+        if (map != null)
+        {
+            SceneManager.Space?.UpdateMap(map);
+        }
+
+        SoundManager.RefreshMenuMusicPlayback();
+
+        if (SettingsManager.Instance.Settings.AutoplayJukebox.Value && !SoundManager.Song.Playing && SoundManager.Map != null)
+        {
+            SoundManager.PlayJukebox(SoundManager.JukeboxIndex);
+        }
+    }
+
+    public override void _Process(double delta)
+    {
+        if (Tyanitia.Quitting && SoundManager.Song.VolumeDb > float.NegativeInfinity)
+        {
+            SoundManager.Song.VolumeDb = Mathf.Lerp(SoundManager.Song.VolumeDb, -80f, (float)delta * 2);
+        }
+    }
+
+    public void Transition(Panel menu, bool instant = false)
+    {
+        if (CurrentMenu == menu)
+        {
+            return;
+        }
+
+        LastMenu = CurrentMenu;
+        CurrentMenu = menu;
+
+        topBarButtonsContainer.GetNode<Button>(new(LastMenu.Name)).Disabled = false;
+        topBarButtonsContainer.GetNode<Button>(new(CurrentMenu.Name)).Disabled = true;
+
+        double tweenTime = instant ? 0 : 0.15;
+
+        Tween outTween = CreateTween().SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.In);
+        outTween.TweenProperty(LastMenu, "modulate", Color.Color8(255, 255, 255, 0), tweenTime);
+        outTween.TweenCallback(
+            Callable.From(() =>
+            {
+                LastMenu.Visible = false;
+            })
+        );
+
+        CurrentMenu.Visible = true;
+
+        Tween inTween = CreateTween().SetTrans(Tween.TransitionType.Quad);
+        inTween.TweenProperty(CurrentMenu, "modulate", Color.Color8(255, 255, 255), tweenTime);
+
+        SoundManager.RefreshMenuMusicPlayback();
+    }
+}

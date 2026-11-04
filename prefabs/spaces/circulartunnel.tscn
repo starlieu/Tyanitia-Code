@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://xlj40hoaf7lo"]
+
+[ext_resource type="Script" uid="uid://c5mdwabsbd4t5" path="res://scripts/spaces/CircularTunnel.cs" id="1_7uc02"]
+[ext_resource type="Texture2D" uid="uid://nsuf0f0l30" path="res://textures/spaces/circulartunnel/ring.png" id="2_7uc02"]
+
+[sub_resource type="Environment" id="Environment_i2qd1"]
+ambient_light_source = 1
+ambient_light_color = Color(1, 1, 1, 1)
+reflected_light_source = 1
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0, 0, 0, 1)
+fog_light_energy = 0.01
+fog_density = 1.0
+fog_depth_curve = 0.8485127
+fog_depth_begin = 5.0
+fog_depth_end = 150.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cb3yx"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("2_7uc02")
+distance_fade_mode = 1
+distance_fade_min_distance = 15.0
+distance_fade_max_distance = 40.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_sku4h"]
+material = SubResource("StandardMaterial3D_cb3yx")
+size = Vector2(8, 8)
+
+[node name="CircularTunnel" type="Node3D" unique_id=1740008516]
+script = ExtResource("1_7uc02")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=278552244]
+environment = SubResource("Environment_i2qd1")
+
+[node name="Rings" type="Node3D" parent="." unique_id=1743608970]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 0, 0)
+
+[node name="1" type="MeshInstance3D" parent="Rings" unique_id=2007434064]
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="2" type="MeshInstance3D" parent="Rings" unique_id=1988406875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5000014)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="3" type="MeshInstance3D" parent="Rings" unique_id=1582574032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="4" type="MeshInstance3D" parent="Rings" unique_id=176014594]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22.5)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="5" type="MeshInstance3D" parent="Rings" unique_id=1324853464]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="6" type="MeshInstance3D" parent="Rings" unique_id=1303428517]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -37.5)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="7" type="MeshInstance3D" parent="Rings" unique_id=1899433621]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45.000004)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="8" type="MeshInstance3D" parent="Rings" unique_id=1309912634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -52.5)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="9" type="MeshInstance3D" parent="Rings" unique_id=1836294748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.5)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="10" type="MeshInstance3D" parent="Rings" unique_id=74715341]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="11" type="MeshInstance3D" parent="Rings" unique_id=482743723]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 22.5)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="12" type="MeshInstance3D" parent="Rings" unique_id=655974884]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="13" type="MeshInstance3D" parent="Rings" unique_id=635914509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 37.5)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")
+
+[node name="14" type="MeshInstance3D" parent="Rings" unique_id=1492842686]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 45)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_sku4h")

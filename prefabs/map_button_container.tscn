@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b28wvcd8uuogt"]
+
+[node name="MapButtonContainer" type="HBoxContainer" unique_id=426546612]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1

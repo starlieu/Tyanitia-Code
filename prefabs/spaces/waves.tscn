@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://t8stmueifd3q"]
+
+[ext_resource type="Script" uid="uid://1dhyo8iq7fy2" path="res://scripts/spaces/Waves.cs" id="1_018g8"]
+[ext_resource type="Shader" uid="uid://c0caw7os4jvr4" path="res://scripts/shaders/sky_noise_waves.gdshader" id="2_m5heb"]
+[ext_resource type="Texture2D" uid="uid://c4u5y3e8yamuk" path="res://textures/empty.png" id="3_ewipa"]
+[ext_resource type="Shader" uid="uid://1vvyfqyj0n87" path="res://scripts/shaders/water_ripple.gdshader" id="4_56okg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s7g12"]
+shader = ExtResource("2_m5heb")
+shader_parameter/sine_color_swap = false
+shader_parameter/opacity = 1.0
+shader_parameter/coverage = 1.0
+shader_parameter/background_color = Color(0, 0, 0, 1)
+shader_parameter/image_a = ExtResource("3_ewipa")
+shader_parameter/image_b = ExtResource("3_ewipa")
+shader_parameter/image_lerp = 0.0
+shader_parameter/image_lod = 5.0
+
+[sub_resource type="Sky" id="Sky_cqp65"]
+sky_material = SubResource("ShaderMaterial_s7g12")
+
+[sub_resource type="Environment" id="Environment_su0lf"]
+background_mode = 2
+sky = SubResource("Sky_cqp65")
+glow_intensity = 0.5
+glow_strength = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_018g8"]
+render_priority = 0
+shader = ExtResource("4_56okg")
+shader_parameter/water_color = Color(0, 0, 0, 1)
+shader_parameter/fresnel_strength = 0.25
+shader_parameter/fresnel_color = Color(0.0, 0.42, 0.43, 1)
+shader_parameter/echo = 0.0
+shader_parameter/echo_color = Color(0.96, 0.12, 0.62, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_and4y"]
+material = SubResource("ShaderMaterial_018g8")
+size = Vector2(4000, 4000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jaxqn"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+proximity_fade_distance = 4.0
+distance_fade_mode = 1
+distance_fade_max_distance = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_018g8"]
+radius = 0.016
+height = 0.032
+radial_segments = 8
+rings = 4
+
+[sub_resource type="Gradient" id="Gradient_exyen"]
+offsets = PackedFloat32Array(0, 0.2, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+metadata/_snap_enabled = true
+
+[node name="Waves" type="Node3D" unique_id=728676692]
+script = ExtResource("1_018g8")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2086350008]
+environment = SubResource("Environment_su0lf")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1115967308]
+transform = Transform3D(1, 0, 0, 0, 0.9659259, -0.25881904, 0, 0.25881904, 0.9659259, 0, 0, 0)
+fov = 70.0
+
+[node name="Water" type="MeshInstance3D" parent="." unique_id=1454706985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.01, 0)
+sorting_offset = -1000.0
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_and4y")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="." unique_id=1809462337]
+visible = false
+material_override = SubResource("StandardMaterial3D_jaxqn")
+amount = 384
+lifetime = 10.0
+mesh = SubResource("SphereMesh_018g8")
+emission_shape = 3
+emission_box_extents = Vector3(32, 1, 32)
+direction = Vector3(0, 1, 0)
+spread = 30.0
+flatness = 1.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.4
+initial_velocity_max = 0.6
+damping_min = 0.02
+damping_max = 0.05
+scale_amount_min = 0.0
+color = Color(0.96, 0.22, 0.68, 1)
+color_ramp = SubResource("Gradient_exyen")

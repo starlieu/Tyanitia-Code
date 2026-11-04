@@ -1,0 +1,179 @@
+[gd_scene format=3 uid="uid://no1sqvmu6mq3"]
+
+[ext_resource type="Script" uid="uid://cwdd0qg7m3tnk" path="res://scripts/ui/menu/play/MapButtonWide.cs" id="1_4823j"]
+[ext_resource type="Shader" uid="uid://rngh60dyh10b" path="res://scripts/shaders/outline.gdshader" id="2_84wsl"]
+[ext_resource type="Shader" uid="uid://b38n4irr1f443" path="res://user/skins/default/ui/play/map_button_cover.gdshader" id="3_d10q8"]
+[ext_resource type="Texture2D" uid="uid://cacq7g5ijo7sy" path="res://user/skins/default/ui/play/favorite.png" id="4_ew23d"]
+[ext_resource type="Theme" uid="uid://dhuhu3mmaew1a" path="res://themes/theme.tres" id="5_mpifo"]
+[ext_resource type="Shader" uid="uid://d0g8fej0676c" path="res://scripts/shaders/linear_alpha_gradient.gdshader" id="6_frxlp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4823j"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_boybo"]
+shader = ExtResource("2_84wsl")
+shader_parameter/outline_color = Color(0.05, 0.05, 0.05, 1)
+shader_parameter/outline_opacity = 1.0
+shader_parameter/light_color = Color(0.0, 0.88, 0.80, 1)
+shader_parameter/cursor_light_color = Color(0.15, 0.15, 0.15, 1)
+shader_parameter/fill = 0.0
+shader_parameter/glow_radius = 350.0
+shader_parameter/glow_exponent = 2.0
+shader_parameter/light_position = Vector2(0, 0)
+shader_parameter/cursor_position = Vector2(0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b5pxb"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gpm1h"]
+shader = ExtResource("3_d10q8")
+
+[sub_resource type="LabelSettings" id="LabelSettings_gpm1h"]
+font_size = 23
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o1d10"]
+shader = ExtResource("6_frxlp")
+
+[node name="MapButtonWide" type="Control" unique_id=807495564]
+self_modulate = Color(0, 0, 0, 0.8784314)
+clip_contents = true
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 1
+script = ExtResource("1_4823j")
+
+[node name="Holder" type="Panel" parent="." unique_id=1367627462]
+self_modulate = Color(0, 0, 0, 0.8784314)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4823j")
+
+[node name="Outline" type="Panel" parent="Holder" unique_id=258196166]
+material = SubResource("ShaderMaterial_boybo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b5pxb")
+
+[node name="Cover" type="TextureRect" parent="Holder" unique_id=925412650]
+texture_filter = 6
+material = SubResource("ShaderMaterial_gpm1h")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 2
+stretch_mode = 6
+
+[node name="Favorited" type="TextureRect" parent="Holder" unique_id=922682128]
+visible = false
+texture_filter = 6
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -32.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 32.0
+grow_horizontal = 0
+pivot_offset = Vector2(12, 12)
+texture = ExtResource("4_ew23d")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="Holder" unique_id=704763863]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = 8.0
+offset_right = -40.0
+theme = ExtResource("5_mpifo")
+text = "Long Artist Name - Kind Of Really Long Song Title Compared To Most Songs I Think"
+label_settings = SubResource("LabelSettings_gpm1h")
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Separator" type="ColorRect" parent="Holder" unique_id=667837692]
+material = SubResource("ShaderMaterial_o1d10")
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_right = -16.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.1254902)
+
+[node name="Extra" type="RichTextLabel" parent="Holder" unique_id=1897525218]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_right = -8.0
+offset_bottom = -8.0
+theme = ExtResource("5_mpifo")
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+text = "[outline_size=2][outline_color=000000][color=808080]12:34 — [color=00ff00]Easy [color=808080]by [color=b0b0b0]Mapper A, Mapper B & Mapper C"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+vertical_alignment = 1
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="Button" type="Button" parent="Holder" unique_id=234619236]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+flat = true
