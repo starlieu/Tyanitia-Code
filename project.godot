@@ -89,7 +89,11 @@ rendering/root_node_layout_direction=1
 common/physics_ticks_per_second=120
 
 [rendering]
+<<<<<<< HEAD
 renderer/rendering_method="gl_compatibility"
+=======
+
+>>>>>>> ef59364 (Initial commit)
 renderer/rendering_method.mobile="mobile"
 textures/vram_compression/import_etc2_astc=true
 textures/lossless_compression/force_png=true
