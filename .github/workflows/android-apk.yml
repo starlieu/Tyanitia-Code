@@ -47,9 +47,10 @@ jobs:
           VERSION="${{ steps.godot.outputs.version }}"
           curl -fsSL "https://github.com/godotengine/godot/releases/download/${VERSION}-stable/Godot_v${VERSION}-stable_mono_linux_x86_64.zip" -o godot.zip
           unzip -q godot.zip -d godot-bin
+          GODOT_BIN="$PWD/godot-bin/Godot_v${VERSION}-stable_mono_linux.x86_64"
+          chmod +x "$GODOT_BIN"
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
           echo "$PWD/godot-bin" >> "$GITHUB_PATH"
-          chmod +x godot-bin/Godot_v${VERSION}-stable_mono_linux.x86_64
-          echo "GODOT_BIN=$PWD/godot-bin/Godot_v${VERSION}-stable_mono_linux.x86_64" >> "$GITHUB_ENV"
 
       - name: Install Godot export templates
         run: |
@@ -63,6 +64,9 @@ jobs:
         run: dotnet restore Tyanitia.csproj && dotnet build Tyanitia.csproj --configuration ExportRelease --no-restore
 
       - name: Export Android debug APK
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_NDK_ROOT: ${{ env.ANDROID_HOME }}/ndk/29.0.14206865
         run: |
           mkdir -p build/android
           "$GODOT_BIN" --headless --path . --editor --quit
