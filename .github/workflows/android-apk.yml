@@ -50,7 +50,6 @@ jobs:
           GODOT_BIN="$PWD/godot-bin/Godot_v${VERSION}-stable_mono_linux.x86_64"
           chmod +x "$GODOT_BIN"
           echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
-          echo "$PWD/godot-bin" >> "$GITHUB_PATH"
 
       - name: Install Godot export templates
         run: |
@@ -70,12 +69,12 @@ jobs:
         run: |
           mkdir -p build/android
           "$GODOT_BIN" --headless --path . --editor --quit
-          "$GODOT_BIN" --headless --path . --export-debug Android build/android/Tyanitia-debug.apk
+          "$GODOT_BIN" --headless --path . --export-debug Android build/android/Tyanitia.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: Tyanitia-debug-android
-          path: build/android/Tyanitia-debug.apk
+          path: build/android/Tyanitia.apk
           if-no-files-found: error
           retention-days: 14
