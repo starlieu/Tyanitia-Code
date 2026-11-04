@@ -56,8 +56,8 @@ jobs:
           VERSION="${{ steps.godot.outputs.version }}"
           mkdir -p "$HOME/.local/share/godot/export_templates/${VERSION}.stable"
           curl -fsSL "https://github.com/godotengine/godot/releases/download/${VERSION}-stable/Godot_v${VERSION}-stable_mono_export_templates.tpz" -o templates.tpz
-          unzip -p templates.tpz templates/android_source.zip > android_source.zip
-          unzip -q android_source.zip -d "$HOME/.local/share/godot/export_templates/${VERSION}.stable"
+          unzip -q templates.tpz -d templates
+          cp -a templates/templates/. "$HOME/.local/share/godot/export_templates/${VERSION}.stable/"
 
       - name: Restore and build C# project
         run: dotnet restore Tyanitia.csproj && dotnet build Tyanitia.csproj --configuration ExportRelease --no-restore
