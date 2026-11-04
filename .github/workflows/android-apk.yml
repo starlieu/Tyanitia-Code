@@ -45,7 +45,8 @@ jobs:
       - name: Download Godot .NET
         run: |
           VERSION="${{ steps.godot.outputs.version }}"
-          curl -fsSL "https://github.com/godotengine/godot/releases/download/${VERSION}-stable/Godot_v${VERSION}-stable_mono_linux_x86_64.zip" -o godot.zip
+          ASSET_VERSION="${VERSION}-stable"
+          curl -fsSL "https://github.com/godotengine/godot/releases/download/${ASSET_VERSION}/Godot_v${VERSION}-stable_mono_linux_x86_64.zip" -o godot.zip
           unzip -q godot.zip -d godot-bin
           GODOT_BIN="$PWD/godot-bin/Godot_v${VERSION}-stable_mono_linux.x86_64"
           chmod +x "$GODOT_BIN"
@@ -54,10 +55,12 @@ jobs:
       - name: Install Godot export templates
         run: |
           VERSION="${{ steps.godot.outputs.version }}"
-          mkdir -p "$HOME/.local/share/godot/export_templates/${VERSION}.stable"
-          curl -fsSL "https://github.com/godotengine/godot/releases/download/${VERSION}-stable/Godot_v${VERSION}-stable_mono_export_templates.tpz" -o templates.tpz
+          ASSET_VERSION="${VERSION}-stable"
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${VERSION}.stable"
+          mkdir -p "$TEMPLATE_DIR"
+          curl -fsSL "https://github.com/godotengine/godot/releases/download/${ASSET_VERSION}/Godot_v${VERSION}-stable_mono_export_templates.tpz" -o templates.tpz
           unzip -q templates.tpz -d templates
-          cp -a templates/templates/. "$HOME/.local/share/godot/export_templates/${VERSION}.stable/"
+          cp -a templates/templates/. "$TEMPLATE_DIR/"
 
       - name: Restore and build C# project
         run: dotnet restore Tyanitia.csproj && dotnet build Tyanitia.csproj --configuration ExportRelease --no-restore
