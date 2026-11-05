@@ -51,13 +51,24 @@ jobs:
             "ndk;29.0.14206865"
 
       - name: Download Godot .NET
+        shell: bash
         run: |
+          set -euo pipefail
           VERSION="${{ steps.godot.outputs.version }}"
           ASSET_VERSION="${VERSION}-stable"
           curl -fsSL "https://github.com/godotengine/godot/releases/download/${ASSET_VERSION}/Godot_v${VERSION}-stable_mono_linux_x86_64.zip" -o godot.zip
           unzip -q godot.zip -d godot-bin
-          GODOT_BIN="$PWD/godot-bin/Godot_v${VERSION}-stable_mono_linux.x86_64"
+          echo "--- extracted layout ---"
+          find godot-bin -maxdepth 3 | sort
+          # Locate the editor binary (the zip nests it in a subfolder; name uses _ or .)
+          GODOT_BIN="$(find godot-bin -type f \( -name 'Godot_v*_mono_linux*x86_64' -o -name 'Godot_v*_mono_linux.x86_64' \) ! -name '*.zip' | head -n1)"
+          if [ -z "$GODOT_BIN" ]; then
+            echo "Godot binary not found after unzip" >&2
+            exit 1
+          fi
+          GODOT_BIN="$(realpath "$GODOT_BIN")"
           chmod +x "$GODOT_BIN"
+          echo "Using Godot binary: $GODOT_BIN"
           echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
 
       - name: Install Godot export templates
