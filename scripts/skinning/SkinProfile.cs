@@ -9,6 +9,9 @@ public partial class SkinProfile : RefCounted
 
     public ImageTexture GridImage { get; set; } = new();
 
+    /// <summary>Optional equirectangular gameplay background supplied by the active skin.</summary>
+    public ImageTexture GameplayBackgroundImage { get; set; }
+
     public ImageTexture GridGuidesImage { get; set; } = new();
 
     public ImageTexture VisibilityAssistImage { get; set; } = new();

@@ -59,6 +59,7 @@ public partial class SkinManager : Node
 
         skin.CursorImage = loadTexture("game/cursor.png");
         skin.GridImage = loadTexture("game/grid.png");
+        skin.GameplayBackgroundImage = loadTexture("game/background.png");
         skin.GridGuidesImage = loadTexture("game/grid_guides.png");
         skin.VisibilityAssistImage = loadTexture("game/visibility_assist.png");
         skin.PanelLeftBackgroundImage = loadTexture("game/panel_left_background.png");

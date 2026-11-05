@@ -61,6 +61,21 @@ public partial class BaseSpace : Node3D
         var skin = SkinManager.Instance.Skin;
 
         NoteHitColor = skin.NoteColors[^1];
+
+        // Keep the selected space and its meshes in the scene; only replace the clear
+        // color/sky when the skin provides an optional equirectangular image.
+        if (GameplayBackgroundImageIsValid(skin.GameplayBackgroundImage))
+        {
+            WorldEnvironment.Environment = (Environment)WorldEnvironment.Environment.Duplicate(true);
+            var panorama = new PanoramaSkyMaterial { Panorama = skin.GameplayBackgroundImage };
+            WorldEnvironment.Environment.BackgroundMode = Environment.BGMode.Sky;
+            WorldEnvironment.Environment.Sky = new Sky { SkyMaterial = panorama };
+        }
+    }
+
+    private static bool GameplayBackgroundImageIsValid(Texture2D texture)
+    {
+        return texture != null && texture.GetWidth() > 0 && texture.GetHeight() > 0;
     }
 
     public virtual void UpdateMap(Map map)
