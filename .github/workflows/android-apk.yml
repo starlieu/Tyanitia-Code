@@ -72,14 +72,34 @@ jobs:
           echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
 
       - name: Install Godot export templates
+        shell: bash
         run: |
+          set -euo pipefail
           VERSION="${{ steps.godot.outputs.version }}"
           ASSET_VERSION="${VERSION}-stable"
-          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${VERSION}.stable"
+          # .NET builds of Godot look in "<version>.stable.mono"
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${VERSION}.stable.mono"
           mkdir -p "$TEMPLATE_DIR"
           curl -fsSL "https://github.com/godotengine/godot/releases/download/${ASSET_VERSION}/Godot_v${VERSION}-stable_mono_export_templates.tpz" -o templates.tpz
           unzip -q templates.tpz -d templates
           cp -a templates/templates/. "$TEMPLATE_DIR/"
+          echo "--- installed templates ---"
+          ls -la "$TEMPLATE_DIR"
+          test -f "$TEMPLATE_DIR/android_source.zip"
+
+      - name: Install Android build template into project
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.godot.outputs.version }}"
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${VERSION}.stable.mono"
+          # Same thing as Project > Install Android Build Template in the editor
+          rm -rf android/build
+          mkdir -p android/build
+          unzip -q -o "$TEMPLATE_DIR/android_source.zip" -d android/build
+          touch android/build/.gdignore
+          printf '%s' "${VERSION}.stable.mono" > android/.build_version
+          chmod +x android/build/gradlew || true
 
       - name: Restore and build C# project
         run: dotnet restore Tyanitia.csproj && dotnet build Tyanitia.csproj --configuration ExportRelease --no-restore
