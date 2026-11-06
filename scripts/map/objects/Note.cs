@@ -64,7 +64,11 @@ public partial class Note(int index, int millisecond, float x, float y) : IHitOb
             }
         }
 
+<<<<<<< HEAD
         bool late = isPastWindow(runner, attempt.HardRock ? HitWindow * 0.75f : HitWindow);
+=======
+        bool late = isPastWindow(runner, HitWindow);
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         float replayLateness = attempt.IsReplay && attempt.Replays.Length == 1 ? attempt.Replays[0].Notes[Index] : 0;
 
         if (late && (!attempt.IsReplay || replayLateness == -1))
@@ -82,12 +86,20 @@ public partial class Note(int index, int millisecond, float x, float y) : IHitOb
 
     public HitResult CheckHitResult(Attempt attempt)
     {
+<<<<<<< HEAD
         float hitBox = (float)Constants.HIT_BOX_SIZE * (attempt.HardRock ? 0.75f : 1f);
         if (
             attempt.CursorPosition.X + hitBox >= X - 0.5f
             && attempt.CursorPosition.X - hitBox <= X + 0.5f
             && attempt.CursorPosition.Y + hitBox >= Y - 0.5f
             && attempt.CursorPosition.Y - hitBox <= Y + 0.5f
+=======
+        if (
+            attempt.CursorPosition.X + Constants.HIT_BOX_SIZE >= X - 0.5f
+            && attempt.CursorPosition.X - Constants.HIT_BOX_SIZE <= X + 0.5f
+            && attempt.CursorPosition.Y + Constants.HIT_BOX_SIZE >= Y - 0.5f
+            && attempt.CursorPosition.Y - Constants.HIT_BOX_SIZE <= Y + 0.5f
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         )
         {
             return HitResult.Hit;

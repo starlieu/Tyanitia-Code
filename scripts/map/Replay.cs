@@ -132,9 +132,12 @@ public struct Replay
                     case "NoFail":
                         Modifiers.Add(new NoFailModifier());
                         break;
+<<<<<<< HEAD
                     case "HardRock":
                         Modifiers.Add(new HardRockModifier());
                         break;
+=======
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
                     case "Autoplay":
                         Modifiers.Add(new AutoplayModifier());
                         break;

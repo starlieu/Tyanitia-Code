@@ -13,7 +13,48 @@ public class Misc
 
     public static Texture2D GetModIcon(string mod)
     {
+<<<<<<< HEAD
         return TyanitiaIcons.ForMod(mod);
+=======
+        var skin = SkinManager.Instance.Skin;
+        Texture2D tex;
+
+        switch (mod)
+        {
+            case "NoFail":
+                tex = skin.ModNoFailImage;
+                break;
+            case "Autoplay":
+                tex = skin.ModAutoplayImage;
+                break;
+            case "Ghost":
+                tex = skin.ModGhostImage;
+                break;
+            case "Strobe":
+                tex = skin.ModStrobeImage;
+                break;
+            case "Chaos":
+                tex = skin.ModChaosImage;
+                break;
+            case "Vortex":
+                tex = skin.ModVortexImage;
+                break;
+            case "Earthquake":
+                tex = skin.ModEarthquakeImage;
+                break;
+            case "HFlip":
+                tex = skin.ModHFlipImage;
+                break;
+            case "VFlip":
+                tex = skin.ModVFlipImage;
+                break;
+            default:
+                tex = new PlaceholderTexture2D() { Size = Vector2.One * 32 };
+                break;
+        }
+
+        return tex;
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     }
 
     public static void CopyProperties(Node node, Node reference)

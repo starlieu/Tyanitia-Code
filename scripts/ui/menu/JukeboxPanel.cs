@@ -58,7 +58,11 @@ public partial class JukeboxPanel : Panel, ISkinnable
 
         if (SettingsManager.Instance.Settings.AutoplayJukebox)
         {
+<<<<<<< HEAD
             pauseButton.TextureNormal = TyanitiaIcons.Get("pause");
+=======
+            pauseButton.TextureNormal = SkinManager.Instance.Skin.JukeboxPauseImage;
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
 
         if (SoundManager.Map != null)
@@ -85,7 +89,12 @@ public partial class JukeboxPanel : Panel, ISkinnable
         spectrumMaterial.SetShaderParameter("progress", progress);
         spectrumMaterial.SetShaderParameter("margin", 1 - spectrum.Size.X / GetViewport().GetVisibleRect().Size.X);
 
+<<<<<<< HEAD
         pauseButton.TextureNormal = TyanitiaIcons.Get(SoundManager.IsJukeboxPaused() ? "play" : "pause");
+=======
+        var skin = SkinManager.Instance.Skin;
+        pauseButton.TextureNormal = SoundManager.IsJukeboxPaused() ? skin.JukeboxPlayImage : skin.JukeboxPauseImage;
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     }
 
     public override void _Input(InputEvent @event)
@@ -129,7 +138,11 @@ public partial class JukeboxPanel : Panel, ISkinnable
         {
             title.Text = map.PrettyTitle;
             selectButton.Disabled = false;
+<<<<<<< HEAD
             pauseButton.TextureNormal = TyanitiaIcons.Get("pause");
+=======
+            pauseButton.TextureNormal = SkinManager.Instance.Skin.JukeboxPauseImage;
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
     }
 
@@ -137,9 +150,15 @@ public partial class JukeboxPanel : Panel, ISkinnable
     {
         skin ??= SkinManager.Instance.Skin;
 
+<<<<<<< HEAD
         pauseButton.TextureNormal = TyanitiaIcons.Get(SoundManager.IsJukeboxPaused() ? "play" : "pause");
         skipButton.TextureNormal = TyanitiaIcons.Get("skip");
         rewindButton.TextureNormal = TyanitiaIcons.Get("skip");
+=======
+        pauseButton.TextureNormal = SoundManager.IsJukeboxPaused() ? skin.JukeboxPlayImage : skin.JukeboxPauseImage;
+        skipButton.TextureNormal = skin.JukeboxSkipImage;
+        rewindButton.TextureNormal = skin.JukeboxSkipImage;
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     }
 
     private void pause()

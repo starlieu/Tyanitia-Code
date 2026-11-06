@@ -7,9 +7,12 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
+<<<<<<< HEAD
     <Compile Remove="switch_port/**" />
     <EmbeddedResource Remove="switch_port/**" />
     <None Remove="switch_port/**" />
+=======
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
   </ItemGroup>
   <PropertyGroup>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>

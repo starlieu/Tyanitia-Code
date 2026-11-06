@@ -196,7 +196,10 @@ public partial class Tyanitia : Node
         Modifiers =
         [
             new NoFailModifier(),
+<<<<<<< HEAD
             new HardRockModifier(),
+=======
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
             new AutoplayModifier(),
             new GhostModifier(),
             new StrobeModifier(),

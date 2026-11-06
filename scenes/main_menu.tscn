@@ -38,6 +38,10 @@
 [ext_resource type="Texture2D" uid="uid://b44v7e2jfwmkn" path="res://user/skins/default/ui/buttons/random.png" id="27_tgcit"]
 [ext_resource type="Script" uid="uid://d36x1ln46itd1" path="res://scripts/ui/menu/play/RandomPickButton.cs" id="27_u43bj"]
 [ext_resource type="Script" uid="uid://nob6vs2h1mwj" path="res://scripts/ui/menu/ImportButton.cs" id="28_eku7s"]
+<<<<<<< HEAD
+=======
+[ext_resource type="Script" path="res://scripts/ui/menu/OnlineMapBrowser.cs" id="28_online_maps"]
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 [ext_resource type="Shader" uid="uid://rngh60dyh10b" path="res://scripts/shaders/outline.gdshader" id="30_q13xq"]
 [ext_resource type="Texture2D" uid="uid://bfy3x7rqnts4i" path="res://user/skins/default/ui/buttons/filter.png" id="31_5053t"]
 [ext_resource type="Texture2D" uid="uid://bl6ten82nkjmd" path="res://user/skins/default/ui/buttons/sort.png" id="32_2wgix"]
@@ -140,6 +144,7 @@ Button/styles/normal = SubResource("StyleBoxFlat_5ycqf")
 Button/styles/pressed = SubResource("StyleBoxFlat_keb1d")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_764ux"]
+<<<<<<< HEAD
 content_margin_left = 28.0
 content_margin_top = 12.0
 content_margin_right = 28.0
@@ -190,6 +195,45 @@ corner_radius_bottom_right = 32
 corner_radius_bottom_left = 32
 shadow_color = Color(0.0, 0.88, 0.8, 0.18)
 shadow_size = 12
+=======
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.47058824)
+corner_radius_top_left = 2
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4jiv"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.2, 0.2, 0.2, 0.078431375)
+border_width_left = 2
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vanrq"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3137255)
+border_width_left = 2
+border_color = Color(0.0, 0.88, 0.80, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 2
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6pifw"]
 
@@ -479,6 +523,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_5gt56")
 [node name="Buttons" type="VBoxContainer" parent="Menus/Home" unique_id=695816730]
 layout_mode = 1
 anchors_preset = -1
+<<<<<<< HEAD
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -488,6 +533,13 @@ offset_top = -205.0
 offset_right = 210.0
 offset_bottom = 205.0
 theme_override_constants/separation = 14
+=======
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 80.0
+offset_right = 400.0
+offset_bottom = -80.0
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Menus/Home/Buttons" unique_id=1192566578]
@@ -498,12 +550,20 @@ layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_m671i")
+<<<<<<< HEAD
 theme_override_font_sizes/font_size = 26
+=======
+theme_override_font_sizes/font_size = 36
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 theme_override_styles/normal = SubResource("StyleBoxFlat_764ux")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_b4jiv")
 theme_override_styles/hover = SubResource("StyleBoxFlat_vanrq")
 text = "PLAY"
+<<<<<<< HEAD
 alignment = 1
+=======
+alignment = 0
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
 [node name="MarginContainer2" type="MarginContainer" parent="Menus/Home/Buttons" unique_id=677178319]
 layout_mode = 2
@@ -513,62 +573,107 @@ layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_m671i")
+<<<<<<< HEAD
 theme_override_font_sizes/font_size = 26
+=======
+theme_override_font_sizes/font_size = 36
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 theme_override_styles/normal = SubResource("StyleBoxFlat_764ux")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_b4jiv")
 theme_override_styles/hover = SubResource("StyleBoxFlat_vanrq")
 text = "SETTINGS"
+<<<<<<< HEAD
 alignment = 1
 script = ExtResource("8_yxnar")
 
 [node name="MarginContainer3" type="MarginContainer" parent="Menus/Home/Buttons" unique_id=348929571]
 visible = false
 layout_mode = 2
+=======
+alignment = 0
+script = ExtResource("8_yxnar")
+
+[node name="MarginContainer3" type="MarginContainer" parent="Menus/Home/Buttons" unique_id=348929571]
+layout_mode = 2
+theme_override_constants/margin_right = 100
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
 [node name="Extras" type="Button" parent="Menus/Home/Buttons/MarginContainer3" unique_id=728550159]
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_m671i")
+<<<<<<< HEAD
 theme_override_font_sizes/font_size = 26
+=======
+theme_override_font_sizes/font_size = 22
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 theme_override_styles/normal = SubResource("StyleBoxFlat_764ux")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_b4jiv")
 theme_override_styles/hover = SubResource("StyleBoxFlat_vanrq")
 text = "EXTRAS"
+<<<<<<< HEAD
 alignment = 1
 
 [node name="MarginContainer4" type="MarginContainer" parent="Menus/Home/Buttons" unique_id=559769508]
 visible = false
 layout_mode = 2
+=======
+alignment = 0
+
+[node name="MarginContainer4" type="MarginContainer" parent="Menus/Home/Buttons" unique_id=559769508]
+layout_mode = 2
+theme_override_constants/margin_right = 100
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
 [node name="ReleaseNotes" type="Button" parent="Menus/Home/Buttons/MarginContainer4" unique_id=645519198]
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_m671i")
+<<<<<<< HEAD
 theme_override_font_sizes/font_size = 26
+=======
+theme_override_font_sizes/font_size = 22
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 theme_override_styles/normal = SubResource("StyleBoxFlat_764ux")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_b4jiv")
 theme_override_styles/hover = SubResource("StyleBoxFlat_vanrq")
 text = "TYANITIA RELEASES"
+<<<<<<< HEAD
 alignment = 1
+=======
+alignment = 0
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 script = ExtResource("8_akqfu")
 Link = "https://github.com/Tyanitia/Client/releases/tag/{0}"
 
 [node name="MarginContainer5" type="MarginContainer" parent="Menus/Home/Buttons" unique_id=2078578335]
 layout_mode = 2
+<<<<<<< HEAD
+=======
+theme_override_constants/margin_right = 100
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
 [node name="Quit" type="Button" parent="Menus/Home/Buttons/MarginContainer5" unique_id=87671349]
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme = SubResource("Theme_m671i")
+<<<<<<< HEAD
 theme_override_font_sizes/font_size = 26
+=======
+theme_override_font_sizes/font_size = 22
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 theme_override_styles/normal = SubResource("StyleBoxFlat_764ux")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_b4jiv")
 theme_override_styles/hover = SubResource("StyleBoxFlat_vanrq")
 text = "QUIT"
+<<<<<<< HEAD
 alignment = 1
+=======
+alignment = 0
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 script = ExtResource("9_yxnar")
 
 [node name="Play" type="Panel" parent="Menus" unique_id=91213776]
@@ -610,10 +715,16 @@ stretch_mode = 1
 [node name="MapList" type="Panel" parent="Menus/Play" unique_id=57262844]
 layout_mode = 1
 anchors_preset = -1
+<<<<<<< HEAD
 anchor_left = 0.49
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 8.0
+=======
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 offset_top = 128.0
 offset_right = -8.0
 offset_bottom = -80.0
@@ -621,8 +732,11 @@ grow_horizontal = 0
 mouse_filter = 1
 theme = ExtResource("6_engjn")
 script = ExtResource("12_yxnar")
+<<<<<<< HEAD
 Layout = 1
 SquareButtonMinimumSize = 220.0
+=======
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 SquareButtonHoveredSize = 10.0
 
 [node name="ScrollBar" type="Panel" parent="Menus/Play/MapList" unique_id=778751162]
@@ -741,16 +855,37 @@ expand_mode = 1
 [node name="MapInfo" type="AspectRatioContainer" parent="Menus/Play" unique_id=140630444]
 layout_mode = 1
 anchors_preset = -1
+<<<<<<< HEAD
 anchor_left = 0.01
 anchor_right = 0.48
 anchor_bottom = 1.0
 offset_left = 8.0
+=======
+anchor_left = 0.05
+anchor_right = 0.45
+anchor_bottom = 1.0
+offset_left = 8.000004
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 offset_top = 128.0
 offset_bottom = -80.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("22_qw82i")
 
+<<<<<<< HEAD
+=======
+[node name="OnlineMapBrowser" type="Control" parent="Menus/Play"]
+visible = false
+z_index = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("28_online_maps")
+
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 [node name="Holder" type="Panel" parent="Menus/Play/MapInfo" unique_id=981210358]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -827,6 +962,18 @@ filters = PackedStringArray("*.sspm", "*.phxm", "*.txt", "*.rhm")
 use_native_dialog = true
 script = ExtResource("2_yxnar")
 
+<<<<<<< HEAD
+=======
+[node name="OnlineMaps" type="Button" parent="Menus/Play/SubTopBar/HBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("6_engjn")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Online Maps"
+
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 [node name="Random" type="Button" parent="Menus/Play/SubTopBar/HBoxContainer" unique_id=1089194663]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2

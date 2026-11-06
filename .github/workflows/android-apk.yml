@@ -1,0 +1,88 @@
+name: Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - fix/gameplay-hud-render-artifacts
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          lfs: true
+
+      - name: Read Godot version
+        id: godot
+        run: echo "version=$(tr -d '[:space:]' < .github/godot_version.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Setup Java
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK components
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdkmanager --sdk_root="$ANDROID_HOME" --licenses < /dev/null
+          sdkmanager --sdk_root="$ANDROID_HOME" \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
+            "ndk;29.0.14206865"
+
+      - name: Download Godot .NET
+        run: |
+          VERSION="${{ steps.godot.outputs.version }}"
+          ASSET_VERSION="${VERSION}-stable"
+          curl -fsSL "https://github.com/godotengine/godot/releases/download/${ASSET_VERSION}/Godot_v${VERSION}-stable_mono_linux_x86_64.zip" -o godot.zip
+          unzip -q godot.zip -d godot-bin
+          GODOT_BIN="$PWD/godot-bin/Godot_v${VERSION}-stable_mono_linux.x86_64"
+          chmod +x "$GODOT_BIN"
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+
+      - name: Install Godot export templates
+        run: |
+          VERSION="${{ steps.godot.outputs.version }}"
+          ASSET_VERSION="${VERSION}-stable"
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${VERSION}.stable"
+          mkdir -p "$TEMPLATE_DIR"
+          curl -fsSL "https://github.com/godotengine/godot/releases/download/${ASSET_VERSION}/Godot_v${VERSION}-stable_mono_export_templates.tpz" -o templates.tpz
+          unzip -q templates.tpz -d templates
+          cp -a templates/templates/. "$TEMPLATE_DIR/"
+
+      - name: Restore and build C# project
+        run: dotnet restore Tyanitia.csproj && dotnet build Tyanitia.csproj --configuration ExportRelease --no-restore
+
+      - name: Export Android debug APK
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_NDK_ROOT: ${{ env.ANDROID_HOME }}/ndk/29.0.14206865
+        run: |
+          mkdir -p build/android
+          "$GODOT_BIN" --headless --path . --editor --quit
+          "$GODOT_BIN" --headless --path . --export-debug Android build/android/Tyanitia.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Tyanitia-debug-android
+          path: build/android/Tyanitia.apk
+          if-no-files-found: error
+          retention-days: 14

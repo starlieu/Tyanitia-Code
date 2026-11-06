@@ -52,10 +52,15 @@ file_logging/enable_file_logging=true
 [display]
 
 window/handheld/orientation=4
+<<<<<<< HEAD
 window/size/viewport_width=1600
 window/size/viewport_width.mobile=1280
 window/size/viewport_height=900
 window/size/viewport_height.mobile=720
+=======
+window/size/viewport_width=1280
+window/size/viewport_height=720
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
 [dotnet]
 
@@ -91,7 +96,11 @@ rendering/root_node_layout_direction=1
 common/physics_ticks_per_second=120
 
 [rendering]
+<<<<<<< HEAD
 
+=======
+renderer/rendering_method="gl_compatibility"
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 renderer/rendering_method.mobile="mobile"
 textures/vram_compression/import_etc2_astc=true
 textures/lossless_compression/force_png=true

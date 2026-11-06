@@ -3,9 +3,15 @@ using Godot;
 
 public partial class MapButtonSquare : MapButton
 {
+<<<<<<< HEAD
     private Color idleColor = new("253b42");
     private Color hoverColor = new("00e0cc");
     private Color selectColor = new("ff2eb8");
+=======
+    private Color idleColor = Color.Color8(13, 13, 13);
+    private Color hoverColor = Color.Color8(26, 26, 26);
+    private Color selectColor = Color.Color8(201, 0, 69);
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
     private Label difficulty;
     private Label author;

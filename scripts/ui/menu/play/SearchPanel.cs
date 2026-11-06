@@ -12,7 +12,10 @@ public partial class SearchPanel : Panel
     {
         lineEdit = GetNode<LineEdit>("LineEdit");
         searchIcon = GetNode<TextureRect>("TextureRect");
+<<<<<<< HEAD
         searchIcon.Texture = TyanitiaIcons.Get(SearchAuthor ? "author" : "search");
+=======
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
         lineEdit.TextChanged += (text) =>
         {

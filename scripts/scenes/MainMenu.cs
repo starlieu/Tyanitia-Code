@@ -14,12 +14,18 @@ public partial class MainMenu : BaseScene
     public MapList MapList;
     public MapInfo MapInfo;
     public OnlineMapBrowser OnlineMapBrowser;
+<<<<<<< HEAD
     public MapEditorPanel MapEditor;
 
     private Panel menuHolder;
     private Node topBarButtonsContainer;
     private HBoxContainer playTools;
     private Button mapBrowserButton;
+=======
+
+    private Panel menuHolder;
+    private Node topBarButtonsContainer;
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
     public override void _Ready()
     {
@@ -33,6 +39,7 @@ public partial class MainMenu : BaseScene
 
         TopBar = GetNode<Panel>("TopBar");
         topBarButtonsContainer = TopBar.GetNode("MenuButtons");
+<<<<<<< HEAD
         var extras = menuHolder.GetNode<Panel>("Extras");
         extras.Visible = false;
         HomeMenu.GetNode<Button>("Buttons/MarginContainer3/Extras").Visible = false;
@@ -88,6 +95,13 @@ public partial class MainMenu : BaseScene
         playTools.AddChild(onlineMapsButton);
         playTools.MoveChild(onlineMapsButton, 3);
         onlineMapsButton.Pressed += OnlineMapBrowser.Open;
+=======
+        Jukebox = GetNode<JukeboxPanel>("JukeboxPanel");
+        MapList = PlayMenu.GetNode<MapList>("MapList");
+        MapInfo = PlayMenu.GetNode<MapInfo>("MapInfo");
+        OnlineMapBrowser = PlayMenu.GetNode<OnlineMapBrowser>("OnlineMapBrowser");
+        PlayMenu.GetNode<Button>("SubTopBar/HBoxContainer/OnlineMaps").Pressed += OnlineMapBrowser.Open;
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
         CurrentMenu = HomeMenu;
 
@@ -103,8 +117,11 @@ public partial class MainMenu : BaseScene
 
         foreach (Button button in menuButtons.Cast<Button>())
         {
+<<<<<<< HEAD
             if (button == editorButton || button == mapBrowserButton)
                 continue;
+=======
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
             var menu = (Panel)menuHolder.FindChild(button.Name, false);
 
             if (menu != null)
@@ -117,11 +134,18 @@ public partial class MainMenu : BaseScene
 
         if (MobileUi.IsMobile)
         {
+<<<<<<< HEAD
+=======
+            var homeButtons = HomeMenu.GetNode<VBoxContainer>("Buttons");
+            homeButtons.OffsetLeft = 28;
+            homeButtons.OffsetRight = 470;
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
             TopBar.CustomMinimumSize = new Vector2(0, 88);
             TopBar.OffsetBottom = 88;
             TopBar.GetNode<Control>("Logo").CustomMinimumSize = new Vector2(64, 64);
             TopBar.GetNode<Control>("Version").AddThemeFontSizeOverride("normal_font_size", 22);
             TopBar.GetNode<Control>("Version").OffsetLeft = 96;
+<<<<<<< HEAD
 
             MobileUi.EnlargeTouchTargets(HomeMenu.GetNode("Buttons"));
             MobileUi.EnlargeTouchTargets(topBarButtonsContainer);
@@ -229,6 +253,9 @@ public partial class MainMenu : BaseScene
 
         if (subBar.GetNodeOrNull<TextureRect>("SearchAuthor/TextureRect") is TextureRect authorIcon)
             authorIcon.Texture = TyanitiaIcons.Get("author");
+=======
+        }
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     }
 
     public override void _Input(InputEvent @event)
@@ -307,6 +334,7 @@ public partial class MainMenu : BaseScene
             return;
         }
 
+<<<<<<< HEAD
         if (CurrentMenu == PlayMenu)
             OnlineMapBrowser.Visible = false;
         if (CurrentMenu == MapEditor)
@@ -314,6 +342,8 @@ public partial class MainMenu : BaseScene
         if (menu == MapEditor)
             MapEditor.RefreshMaps();
 
+=======
+>>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         LastMenu = CurrentMenu;
         CurrentMenu = menu;
 
