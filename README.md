@@ -4,13 +4,7 @@ Tyanitia is a free-to-play rhythm game where you move your mouse across a 3×3 g
 
 ## Downloads
 
-These packages are built from this project:
-
-| Platform | Package |
-|---|---|
-| Android (ARM64, debug build) | [Tyanitia-debug.apk](build/android/Tyanitia-debug.apk) |
-| Windows x64 | [Tyanitia.zip](build/windows/Tyanitia.zip) |
-| Linux x86_64 | [Tyanitia.zip](build/linux/Tyanitia.zip) |
+You can find them on ([release page](https://github.com/starlieu/Tyanitia-Code/releases/))
 
 The Android package is debug-signed for sideloading and development. A release package for distribution through an app store must be signed with your own release keystore.
 
