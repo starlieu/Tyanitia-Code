@@ -10,13 +10,16 @@ public partial class MobileGameControls : Control
 
     private Button closeMap;
     private Button pause;
+    private Button giveUp;
 
     public override void _Ready()
     {
         closeMap = GetNode<Button>("CloseMap");
         pause = GetNode<Button>("Pause");
+        giveUp = GetNode<Button>("GiveUp");
         closeMap.Pressed += closeCurrentMap;
         pause.Pressed += () => game.Menu.ShowMenu();
+        giveUp.Pressed += runner.GiveUp;
         MobileUi.EnlargeTouchTargets(this);
         updateVisibility();
     }
@@ -25,7 +28,22 @@ public partial class MobileGameControls : Control
 
     private void updateVisibility()
     {
-        Visible = MobileUi.IsMobile && runner.Playing && !runner.Attempt.IsReplay && !SettingsManager.Shown;
+        bool shouldBeVisible = MobileUi.IsMobile && runner.Playing && !runner.Attempt.IsReplay && !SettingsManager.Shown;
+        if (Visible == shouldBeVisible)
+            return;
+
+        Visible = shouldBeVisible;
+        if (!Visible)
+            return;
+
+        Color fadedStart = new(1, 1, 1, 0.5f);
+        Color fadedEnd = new(1, 1, 1, 0);
+        pause.Modulate = fadedStart;
+        giveUp.Modulate = fadedStart;
+
+        Tween tween = CreateTween().SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.InOut).SetParallel();
+        tween.TweenProperty(pause, "modulate", fadedEnd, 1).SetDelay(1);
+        tween.TweenProperty(giveUp, "modulate", fadedEnd, 1).SetDelay(1);
     }
 
     private void closeCurrentMap()

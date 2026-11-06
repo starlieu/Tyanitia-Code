@@ -152,7 +152,7 @@ public partial class Game : BaseScene
         PlayerInputController.OnRestartPressed += Restart;
     }
 
-    public override void _UnhandledInput(InputEvent @event)
+    public override void _Input(InputEvent @event)
     {
         if (OS.GetName() != "Android" || Runner == null || !Runner.Playing || Menu.Shown || Attempt.IsReplay)
         {
@@ -164,7 +164,7 @@ public partial class Game : BaseScene
 
         if (@event is InputEventScreenTouch touch)
         {
-            if (touch.Pressed && touch.Position.X >= viewportSize.X * 0.36f)
+            if (touch.Pressed && mobileTouchIndex == -1 && touch.Position.X >= viewportSize.X * 0.36f)
             {
                 mobileTouchIndex = touch.Index;
                 lastMobileTouchPosition = touch.Position;
@@ -194,6 +194,9 @@ public partial class Game : BaseScene
     {
         float touchAreaStart = viewportSize.X * 0.36f;
         float touchAreaWidth = viewportSize.X - touchAreaStart;
+        if (touchAreaWidth <= 0 || viewportSize.Y <= 0)
+            return;
+
         Vector2 movement = touchPosition - lastMobileTouchPosition;
         lastMobileTouchPosition = touchPosition;
         float sensitivity = (float)(double)Attempt.Settings.Sensitivity / 0.3f;
