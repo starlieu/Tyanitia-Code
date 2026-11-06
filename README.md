@@ -2,23 +2,11 @@
 
 Tyanitia is a free-to-play rhythm game where you move your mouse across a 3×3 grid. This project is an open-source client rebrand built with Godot 4.7 and C#. It retains the source project's license; see [LICENSE](LICENSE).
 
-<<<<<<< HEAD
-## Downloads
-
-These packages are built from this project:
-
-| Platform | Package |
-|---|---|
-| Android (ARM64, debug-signed) | [Tyanitia-Android.apk](build/android/Tyanitia-Android.apk) |
-| Windows x64 | [Tyanitia-Windows.zip](build/windows/Tyanitia-Windows.zip) |
-| Linux x86_64 | [Tyanitia-Linux.zip](build/linux/Tyanitia-Linux.zip) |
-=======
 The Play menu's **Online Maps** browser lets you search maps and mappers, filter by notable mapper and verification status, sort results, and download maps into your library.
 
 ## Downloads
 
-You can find them on ([release page](https://github.com/starlieu/Tyanitia-Code/releases/))
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
+You can find them on the [release page](https://github.com/starlieu/Tyanitia-Code/releases/).
 
 The Android package is debug-signed for sideloading and development. A release package for distribution through an app store must be signed with your own release keystore.
 
@@ -30,22 +18,14 @@ Install the APK on an ARM64 device running Android 10 (API 29) or later. If Andr
 
 ### Windows
 
-<<<<<<< HEAD
 1. Extract `Tyanitia-Windows.zip`.
-=======
-1. Extract `Tyanitia.zip`.
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 2. Run `Tyanitia.exe`.
 
 The Microsoft Visual C++ Redistributable may be required on systems where it is not already installed.
 
 ### Linux
 
-<<<<<<< HEAD
 1. Extract `Tyanitia-Linux.zip`.
-=======
-1. Extract `Tyanitia.zip`.
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 2. Run the `Tyanitia` executable from the extracted folder.
 
 If the executable bit was lost while copying the files, run `chmod +x Tyanitia` in the extracted folder.
@@ -77,11 +57,7 @@ For a debug Android APK, create an output directory and export with the Android 
 
 ```bash
 mkdir -p build/android
-<<<<<<< HEAD
 godot --headless --path . --export-debug Android build/android/Tyanitia-Android.apk
-=======
-godot --headless --path . --export-debug Android build/android/Tyanitia-debug.apk
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 ```
 
 The Android preset targets API 29 or later, compiles against API 36, and enables ARM64. Release exports require a release signing keystore configured in Godot; do not commit keystore passwords.
@@ -94,7 +70,3 @@ The **Video** settings offer Forward+, Mobile, and Compatibility rendering. Godo
 - `scripts/` — C# application, gameplay, settings, and platform integration.
 - `textures/`, `sounds/`, `fonts/`, and `themes/` — game assets.
 - `export_presets.cfg` — Windows, Linux, macOS, and Android export presets.
-<<<<<<< HEAD
-
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
