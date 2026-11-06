@@ -1,0 +1,76 @@
+﻿using System;
+using System.Collections.Generic;
+using Godot;
+
+public class SettingsItem<[MustBeVariant] T> : ISettingsItem
+{
+    private bool init = false;
+
+    public SettingsItem(T value)
+    {
+        Value = value;
+        DefaultValue = value;
+    }
+
+    public event Action<Variant> Updated;
+
+    public Type Type { get; } = typeof(T);
+
+    public string Id { get; set; } = "";
+
+    public string Title { get; set; } = "";
+
+    public string Description { get; set; } = "";
+
+    public string Placeholder { get; set; } = "";
+
+    public T DefaultValue { get; private set; } = default;
+
+    public List<SettingsButton> Buttons { get; set; } = [];
+
+    public SettingsList<T> List { get; set; } = default;
+
+    public SettingsSlider Slider { get; set; } = default;
+
+    public SettingsSection Section { get; set; } = SettingsSection.None;
+
+    public bool Editable { get; set; } = true;
+
+    public bool Visible { get; set; } = true;
+
+    public bool SaveToDisk { get; set; } = true;
+
+    public T Value
+    {
+        get;
+        set
+        {
+            field = value;
+
+            List?.SelectedValue = value;
+
+            UpdateAction?.Invoke(value, !init);
+            Updated?.Invoke(Variant.From(Value));
+
+            if (!init && Id != "")
+            {
+                init = true;
+            }
+        }
+    }
+
+    public Variant GetVariant() => Variant.From(Value);
+
+    public void SetVariant(Variant value)
+    {
+        Value = value.As<T>();
+    }
+
+    public void Reset() => Value = DefaultValue;
+
+    public Action<T, bool> UpdateAction { get; set; } = null;
+
+    public static implicit operator T(SettingsItem<T> item) => item.Value;
+
+    ISettingsList ISettingsItem.List => List;
+}

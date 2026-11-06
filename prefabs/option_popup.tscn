@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://bebobaayug3rn"]
+
+[ext_resource type="Script" uid="uid://blj8rw5boymwb" path="res://scripts/ui/OptionPopup.cs" id="1_p8v60"]
+[ext_resource type="Theme" uid="uid://dhuhu3mmaew1a" path="res://themes/theme.tres" id="2_sdsuv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mrttc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pyqjf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5tt0w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ce3ku"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gcbx2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrttc"]
+bg_color = Color(0, 0, 0, 0.8627451)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_pyqjf"]
+font_size = 20
+
+[node name="OptionPopup" type="Control" unique_id=1842619288 node_paths=PackedStringArray("headerLabel", "infoLabel", "buttonContainer", "buttonTemplate")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_p8v60")
+headerLabel = NodePath("Holder/VBoxContainer/Header")
+infoLabel = NodePath("Holder/VBoxContainer/Info")
+buttonContainer = NodePath("Holder/VBoxContainer/Buttons")
+buttonTemplate = NodePath("Holder/VBoxContainer/Buttons/ButtonTemplate")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1710109709]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.47058824)
+
+[node name="Hide" type="Button" parent="." unique_id=400312587]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mrttc")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_pyqjf")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_5tt0w")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ce3ku")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gcbx2")
+action_mode = 0
+button_mask = 7
+
+[node name="Holder" type="PanelContainer" parent="." unique_id=817349736]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mrttc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Holder" unique_id=1221278314]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="Label" parent="Holder/VBoxContainer" unique_id=959856944]
+layout_mode = 2
+text = "Popup Header"
+label_settings = SubResource("LabelSettings_pyqjf")
+uppercase = true
+
+[node name="Info" type="RichTextLabel" parent="Holder/VBoxContainer" unique_id=2099446918]
+layout_mode = 2
+bbcode_enabled = true
+text = "Information goes here"
+fit_content = true
+
+[node name="Buttons" type="HBoxContainer" parent="Holder/VBoxContainer" unique_id=114660490]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonTemplate" type="Button" parent="Holder/VBoxContainer/Buttons" unique_id=1721016864]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme = ExtResource("2_sdsuv")
+text = "Button"

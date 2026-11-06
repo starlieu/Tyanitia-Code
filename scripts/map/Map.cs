@@ -1,0 +1,204 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using Godot;
+using SQLite;
+
+public partial class Map : RefCounted
+{
+    public static Texture2D DefaultCover = GD.Load<Texture2D>("res://textures/empty.png");
+
+    [PrimaryKey]
+    [AutoIncrement]
+    public int Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+    public int? CacheVersion { get; set; }
+    public string LastModifiedMetadata { get; set; }
+    public string LastModifiedNotes { get; set; }
+
+    /// <summary>
+    /// The hash of the metadata.json, then the objects.phxmo in order
+    /// </summary>
+    public string MetadataObjectHash { get; set; }
+
+    public string Collection { get; set; } = string.Empty;
+
+    [Ignore]
+    public MapSet MapSet { get; set; }
+
+    public string FolderPath { get; set; } = string.Empty;
+
+    public bool Favorite { get; set; }
+
+    [Ignore]
+    public bool Ephemeral { get; set; } = false;
+
+    public string Artist { get; set; } = string.Empty;
+
+    public string ArtistLink { get; set; } = string.Empty;
+
+    public string ArtistPlatform { get; set; } = string.Empty;
+
+    public string Title { get; set; } = string.Empty;
+
+    public string PrettyTitle { get; set; } = string.Empty;
+
+    public float Rating { get; set; } = 0;
+
+    public string CachedMappers { get; set; } = string.Empty;
+
+    [Ignore]
+    public string[] Mappers { get; set; } = [];
+
+    public string PrettyMappers { get; set; } = string.Empty;
+
+    public string DifficultyName { get; set; } = string.Empty;
+
+    public int Difficulty { get; set; } = 0;
+
+    public int Length { get; set; } = 0;
+
+    [Ignore]
+    public byte[] AudioBuffer { get; set; } = [];
+
+    public string AudioExt { get; set; } = string.Empty;
+
+    public int PlayCount { get; set; } = 0;
+
+    private Texture2D cover = DefaultCover;
+
+    [Ignore]
+    public Texture2D Cover
+    {
+        get => getCover();
+        set => cover = value;
+    }
+
+    [Ignore]
+    public AudioStream Audio { get; set; } = null;
+
+    [Ignore]
+    public byte[] CoverBuffer { get; set; } = [];
+
+    [Ignore]
+    public byte[] VideoBuffer { get; set; } = [];
+    private Note[] notes;
+
+    [Ignore]
+    public Note[] Notes
+    {
+        get => notes ?? TryParseNotes();
+        set => notes = value;
+    }
+
+    public Note[] TryParseNotes()
+    {
+        try
+        {
+            notes = MapParser.DecodePHXMO($"{MapUtil.MapsFolder}/{Name}/objects.phxmo");
+            return notes;
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
+    private Texture2D getCover()
+    {
+        string path = $"{MapUtil.MapsFolder}/{Name}";
+
+        if (cover == DefaultCover && File.Exists($"{path}/cover.png"))
+        {
+            byte[] coverBuffer = File.ReadAllBytes($"{path}/cover.png");
+            var image = Util.Misc.LoadImageFromBuffer(coverBuffer);
+
+            if (image != null)
+            {
+                cover = ImageTexture.CreateFromImage(image);
+            }
+        }
+
+        return cover;
+    }
+
+    public Map() { }
+
+    public Map(
+        string folderPath,
+        Note[] data = null,
+        string id = null,
+        string artist = "",
+        string title = "",
+        float rating = 0,
+        string[] mappers = null,
+        int difficulty = 0,
+        string difficultyName = null,
+        int? length = null,
+        byte[] audioBuffer = null,
+        byte[] coverBuffer = null,
+        byte[] videoBuffer = null,
+        bool ephemeral = false,
+        string artistLink = "",
+        string artistPlatform = ""
+    )
+    {
+        CacheVersion = 2;
+
+        FolderPath = folderPath;
+        Ephemeral = ephemeral;
+        MetadataObjectHash = "";
+        LastModifiedMetadata = "";
+        LastModifiedNotes = "";
+        Artist = (artist ?? "").StripEscapes();
+        ArtistLink = artistLink;
+        ArtistPlatform = artistPlatform;
+        Title = (title ?? "").StripEscapes();
+        PrettyTitle = Artist != "" ? $"{Artist} - {Title}" : Title;
+        Rating = rating;
+        Mappers = mappers ?? ["N/A"];
+        PrettyMappers = "N/A";
+        CachedMappers = "N/A";
+        PrettyMappers = Mappers.Join();
+        CachedMappers = Mappers.Join("_");
+        Difficulty = Math.Clamp(difficulty, 0, Constants.DIFFICULTIES.Length - 1);
+        DifficultyName = difficultyName?.StripEscapes() ?? Constants.DIFFICULTIES[Difficulty];
+        AudioBuffer = audioBuffer;
+        CoverBuffer = coverBuffer;
+        VideoBuffer = videoBuffer;
+        Notes = data ?? [];
+        Length = length ?? Notes[^1].Millisecond;
+        Name = Path.GetFileNameWithoutExtension(FolderPath);
+        AudioExt = (AudioBuffer != null && Encoding.UTF8.GetString(AudioBuffer[0..4]) == "OggS") ? "ogg" : "mp3";
+
+        MapManager.Sanitize(this);
+    }
+
+    public string EncodeMeta()
+    {
+        string path = $"{MapUtil.MapsFolder}/{Name}";
+        return Json.Stringify(
+            new Godot.Collections.Dictionary()
+            {
+                ["ID"] = Name,
+                ["Artist"] = Artist,
+                ["ArtistLink"] = ArtistLink,
+                ["ArtistPlatform"] = ArtistPlatform,
+                ["Title"] = Title,
+                ["Rating"] = Rating,
+                ["Mappers"] = Mappers,
+                ["Difficulty"] = Difficulty,
+                ["DifficultyName"] = DifficultyName,
+                ["Length"] = Length,
+                ["HasAudio"] = AudioBuffer != null && File.Exists($"{path}/audio.{AudioExt}"),
+                ["HasCover"] = CoverBuffer != null && File.Exists($"{path}/cover.png"),
+                ["HasVideo"] = VideoBuffer != null && File.Exists($"{path}/video.mp4"),
+                ["AudioExt"] = AudioExt,
+            },
+            "\t"
+        );
+    }
+}

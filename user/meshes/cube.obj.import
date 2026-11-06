@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://d3u33yaicogfd"
+path="res://.godot/imported/cube.obj-7c9bdc33d54e8dd1d50400a28cf52d1b.mesh"
+
+[deps]
+
+files=["res://.godot/imported/cube.obj-7c9bdc33d54e8dd1d50400a28cf52d1b.mesh"]
+
+source_file="res://user/meshes/cube.obj"
+dest_files=["res://.godot/imported/cube.obj-7c9bdc33d54e8dd1d50400a28cf52d1b.mesh", "res://.godot/imported/cube.obj-7c9bdc33d54e8dd1d50400a28cf52d1b.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

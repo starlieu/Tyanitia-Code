@@ -1,0 +1,662 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using Godot;
+
+public partial class SettingsMenu : ColorRect
+{
+    public static SettingsMenu Instance;
+
+    public bool Shown = false;
+
+    private Dictionary<string, Panel> settingPanels = [];
+    private Button hideButton;
+    private Panel holder;
+    private Panel header;
+    private OptionButton profilesButton;
+    private VBoxContainer sidebar;
+    private Panel categories;
+
+    private ColorRect sidebarCategoryTemplate;
+    private ScrollContainer categoryTemplate;
+
+    private ScrollContainer selectedCategory;
+
+    [Export]
+    public FileDialog ImportNightlyDialog;
+
+    [Export]
+    public FileDialog UserFolderDialog;
+
+    public override void _Ready()
+    {
+        Instance = this;
+
+        hideButton = GetNode<Button>("Hide");
+        holder = GetNode<Panel>("Holder");
+        header = holder.GetNode<Panel>("Header");
+        profilesButton = header.GetNode<OptionButton>("Profiles");
+        sidebar = holder.GetNode("Sidebar").GetNode<VBoxContainer>("Container");
+        categories = holder.GetNode<Panel>("Categories");
+
+        sidebarCategoryTemplate = sidebar.GetNode<ColorRect>("SidebarCategoryTemplate");
+        categoryTemplate = categories.GetNode<ScrollContainer>("CategoryTemplate");
+
+        if (MobileUi.IsMobile)
+        {
+            holder.AnchorLeft = 0.04f;
+            holder.AnchorTop = 0.08f;
+            holder.AnchorRight = 0.96f;
+            holder.AnchorBottom = 0.92f;
+            holder.OffsetLeft = 0;
+            holder.OffsetTop = 0;
+            holder.OffsetRight = 0;
+            holder.OffsetBottom = 0;
+        }
+
+        // Keep controls on the left and reserve the right side for a live map preview.
+        holder.AnchorLeft = 0.035f;
+        holder.AnchorTop = 0.055f;
+        holder.AnchorRight = MobileUi.IsMobile ? 0.58f : 0.50f;
+        holder.AnchorBottom = 0.945f;
+        holder.OffsetLeft = 0;
+        holder.OffsetTop = 0;
+        holder.OffsetRight = 0;
+        holder.OffsetBottom = 0;
+
+        var preview = new AutoGameplayPreview { Name = "AutoGameplayPreview" };
+        AddChild(preview);
+        preview.AnchorLeft = MobileUi.IsMobile ? 0.60f : 0.515f;
+        preview.AnchorTop = 0.12f;
+        preview.AnchorRight = 0.965f;
+        preview.AnchorBottom = 0.88f;
+        preview.OffsetLeft = 0;
+        preview.OffsetTop = 0;
+        preview.OffsetRight = 0;
+        preview.OffsetBottom = 0;
+
+        Modulate = Color.Color8(255, 255, 255, 0);
+
+        LineEdit profileEdit = header.GetNode<LineEdit>("ProfileEdit");
+
+        header.GetNode<Button>("CreateProfile").Pressed += () =>
+        {
+            profileEdit.Visible = !profileEdit.Visible;
+        };
+
+        profileEdit.TextSubmitted += (profile) =>
+        {
+            profileEdit.Visible = false;
+
+            SettingsManager.Save();
+            SettingsManager.SetCurrentProfile(profile);
+            SettingsManager.Reload();
+
+            UpdateProfileSelection();
+        };
+
+        profilesButton.ItemSelected += (index) =>
+        {
+            string profile = profilesButton.GetItemText((int)index);
+
+            if (profile == SettingsManager.GetCurrentProfile())
+            {
+                return;
+            }
+
+            SettingsManager.Save();
+            SettingsManager.SetCurrentProfile(profile);
+            SettingsManager.Load();
+        };
+
+        UpdateProfileSelection();
+
+        Panel settingTemplate = categoryTemplate.GetNode("Container").GetNode<Panel>("SettingTemplate");
+        CheckButton checkButtonTemplate = settingTemplate.GetNode<CheckButton>("CheckButton");
+        HSlider sliderTemplate = settingTemplate.GetNode<HSlider>("Slider");
+        LineEdit sliderLineEditTemplate = settingTemplate.GetNode<LineEdit>("SliderLineEdit");
+        LineEdit lineEditTemplate = settingTemplate.GetNode<LineEdit>("LineEdit");
+        OptionButton optionButtonTemplate = settingTemplate.GetNode<OptionButton>("OptionButton");
+        HBoxContainer buttonHboxTemplate = settingTemplate.GetNode<HBoxContainer>("ButtonHBoxContainer");
+        Button buttonTemplate = buttonHboxTemplate.GetNode<Button>("Button");
+
+        settingTemplate.Visible = false;
+
+        foreach (Node child in settingTemplate.GetChildren())
+        {
+            if (child.Name == "Title")
+            {
+                continue;
+            }
+            ;
+
+            settingTemplate.RemoveChild(child);
+        }
+
+        double start = Time.GetTicksUsec();
+
+        foreach (KeyValuePair<SettingsSection, List<ISettingsItem>> section in SettingsManager.Instance.Settings.ToOrderedSectionList())
+        {
+            if (section.Key == SettingsSection.None)
+            {
+                continue;
+            }
+
+            string sectionName = section.Key.ToString();
+
+            ScrollContainer category = categoryTemplate.Duplicate() as ScrollContainer;
+            category.Name = sectionName;
+
+            categories.AddChild(category);
+
+            ColorRect sidebarCategory = sidebarCategoryTemplate.Duplicate() as ColorRect;
+            Button sidebarButton = sidebarCategory.GetNode<Button>("Button");
+
+            sidebarCategory.Name = sectionName;
+            sidebarCategory.Visible = true;
+            sidebarButton.Text = sectionName.ToUpper();
+            sidebarButton.Pressed += () =>
+            {
+                SelectCategory(category);
+            };
+
+            sidebar.AddChild(sidebarCategory);
+
+            if (selectedCategory == null)
+            {
+                SelectCategory(category);
+            }
+
+            VBoxContainer container = category.GetNode<VBoxContainer>("Container");
+
+            foreach (ISettingsItem setting in section.Value)
+            {
+                if (!setting.Visible)
+                {
+                    continue;
+                }
+
+                Panel panel = settingTemplate.Duplicate() as Panel;
+                panel.Name = setting.Id;
+                panel.Visible = true;
+                if (MobileUi.IsMobile)
+                    panel.CustomMinimumSize = new Vector2(0, 136);
+
+                Label title = panel.GetNode<Label>("Title");
+                title.Text = setting.Title;
+                title.TooltipText = setting.Description;
+
+                if (setting.Type == typeof(bool))
+                {
+                    CheckButton checkButton = checkButtonTemplate.Duplicate() as CheckButton;
+
+                    setupToggle(setting, checkButton);
+                    panel.AddChild(checkButton);
+                }
+                else if (setting.Slider != null)
+                {
+                    HSlider slider = sliderTemplate.Duplicate() as HSlider;
+                    LineEdit lineEdit = sliderLineEditTemplate.Duplicate() as LineEdit;
+
+                    setupSlider(setting, slider, lineEdit);
+                    panel.AddChild(slider);
+                    panel.AddChild(lineEdit);
+                }
+                else if (setting.Type == typeof(string) && setting.List == null)
+                {
+                    LineEdit lineEdit = lineEditTemplate.Duplicate() as LineEdit;
+
+                    setupInput(setting, lineEdit);
+                    panel.AddChild(lineEdit);
+                }
+                else if (setting.List != null)
+                {
+                    OptionButton optionButton = optionButtonTemplate.Duplicate() as OptionButton;
+
+                    setupList(setting, optionButton);
+                    panel.AddChild(optionButton);
+                }
+
+                if (setting.Type == typeof(Variant))
+                {
+                    var item = setting as SettingsItem<Variant>;
+                    if (item?.Buttons != null)
+                    {
+                        HBoxContainer hbox = buttonHboxTemplate.Duplicate() as HBoxContainer;
+                        panel.AddChild(hbox);
+
+                        foreach (var settingButton in item.Buttons)
+                        {
+                            Button button = buttonTemplate.Duplicate() as Button;
+                            setupButton(settingButton, button);
+                            hbox.AddChild(button);
+                        }
+                    }
+                }
+
+                container.AddChild(panel);
+                if (MobileUi.IsMobile)
+                    applyMobileSettingLayout(panel);
+                settingPanels[setting.Id] = panel;
+            }
+
+            settingTemplate.QueueFree();
+        }
+
+        Logger.Log($"SETTINGS MENU: {(Time.GetTicksUsec() - start) / 1000}ms");
+
+        HideMenu();
+
+        if (MobileUi.IsMobile)
+            applyMobileSettingsChrome();
+
+        hideButton.Pressed += HideMenu;
+        ImportNightlyDialog.FileSelected += SettingsProfile.ImportFromNightlySettings;
+        UserFolderDialog.DirSelected += SettingsProfile.ConfigureSetUserFolderPath;
+    }
+
+    // Adding GetViewport().SetInputAsHandled() will prevent the Quit popup from appearing when clicking ESC in settings
+    public override void _Input(InputEvent @event)
+    {
+        if (@event is InputEventKey eventKey && eventKey.Pressed)
+        {
+            switch (eventKey.Keycode)
+            {
+                case Key.O:
+                    if (eventKey.CtrlPressed)
+                    {
+                        ShowMenu(!Shown);
+                        GetViewport().SetInputAsHandled();
+                    }
+                    break;
+                case Key.Escape:
+                    if (Shown)
+                    {
+                        ShowMenu(false);
+                        GetViewport().SetInputAsHandled();
+                    }
+                    break;
+            }
+        }
+
+    }
+
+    private void applyMobileSettingLayout(Panel panel)
+    {
+        Label title = panel.GetNode<Label>("Title");
+        title.AnchorLeft = 0.04f;
+        title.AnchorTop = 0.02f;
+        title.AnchorRight = 0.96f;
+        title.AnchorBottom = 0.42f;
+        title.OffsetLeft = 0;
+        title.OffsetTop = 0;
+        title.OffsetRight = 0;
+        title.OffsetBottom = 0;
+        title.AddThemeFontSizeOverride("font_size", 28);
+        title.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+
+        if (panel.GetNodeOrNull<HSlider>("Slider") is HSlider slider)
+        {
+            setMobileControlRect(slider, 0.04f, 0.48f, 0.76f, 1.0f);
+            slider.CustomMinimumSize = new Vector2(0, 76);
+        }
+
+        if (panel.GetNodeOrNull<LineEdit>("SliderLineEdit") is LineEdit sliderValue)
+        {
+            setMobileControlRect(sliderValue, 0.78f, 0.48f, 0.96f, 1.0f);
+            sliderValue.CustomMinimumSize = new Vector2(0, 76);
+            sliderValue.AddThemeFontSizeOverride("font_size", 28);
+        }
+
+        if (panel.GetNodeOrNull<LineEdit>("LineEdit") is LineEdit input)
+        {
+            setMobileControlRect(input, 0.04f, 0.48f, 0.96f, 1.0f);
+            input.CustomMinimumSize = new Vector2(0, 76);
+            input.AddThemeFontSizeOverride("font_size", 28);
+        }
+
+        if (panel.GetNodeOrNull<CheckButton>("CheckButton") is CheckButton check)
+        {
+            setMobileControlRect(check, 0.04f, 0.48f, 0.96f, 1.0f);
+            check.CustomMinimumSize = new Vector2(0, 76);
+            check.AddThemeFontSizeOverride("font_size", 28);
+        }
+
+        if (panel.GetNodeOrNull<OptionButton>("OptionButton") is OptionButton option)
+        {
+            setMobileControlRect(option, 0.04f, 0.48f, 0.96f, 1.0f);
+            option.CustomMinimumSize = new Vector2(0, 76);
+            option.AddThemeFontSizeOverride("font_size", 28);
+        }
+
+        if (panel.GetNodeOrNull<HBoxContainer>("ButtonHBoxContainer") is HBoxContainer buttons)
+        {
+            setMobileControlRect(buttons, 0.04f, 0.48f, 0.96f, 1.0f);
+            buttons.CustomMinimumSize = new Vector2(0, 76);
+            foreach (Button button in buttons.GetChildren().OfType<Button>())
+            {
+                button.CustomMinimumSize = new Vector2(0, 76);
+                button.AddThemeFontSizeOverride("font_size", 28);
+            }
+        }
+    }
+
+    private static void setMobileControlRect(Control control, float left, float top, float right, float bottom)
+    {
+        control.AnchorLeft = left;
+        control.AnchorTop = top;
+        control.AnchorRight = right;
+        control.AnchorBottom = bottom;
+        control.OffsetLeft = 0;
+        control.OffsetTop = 0;
+        control.OffsetRight = 0;
+        control.OffsetBottom = 0;
+    }
+
+    private void applyMobileSettingsChrome()
+    {
+        foreach (ColorRect category in sidebar.GetChildren().OfType<ColorRect>())
+        {
+            category.CustomMinimumSize = new Vector2(0, 92);
+            Button button = category.GetNode<Button>("Button");
+            button.CustomMinimumSize = new Vector2(0, 92);
+            button.AddThemeFontSizeOverride("font_size", 26);
+        }
+
+        foreach (ScrollContainer scroll in categories.GetChildren().OfType<ScrollContainer>())
+            scroll.GetVScrollBar().CustomMinimumSize = new Vector2(48, 0);
+
+        holder.GetNode<ScrollContainer>("Sidebar").GetVScrollBar().CustomMinimumSize = new Vector2(48, 0);
+        hideButton.CustomMinimumSize = new Vector2(110, 88);
+        hideButton.AddThemeFontSizeOverride("font_size", 28);
+    }
+
+    public void ShowMenu(bool show = true)
+    {
+        Shown = show;
+        hideButton.MouseFilter = show ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
+
+        CallDeferred("move_to_front");
+
+        if (Shown)
+        {
+            Visible = true;
+            holder.OffsetTop = 25;
+            holder.OffsetBottom = 25;
+        }
+
+        Tween tween = CreateTween().SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out).SetParallel();
+        tween.TweenProperty(this, "modulate", Color.Color8(255, 255, 255, (byte)(Shown ? 255 : 0b0)), 0.25);
+        tween.TweenProperty(holder, "offset_top", Shown ? 0 : 25, 0.25);
+        tween.TweenProperty(holder, "offset_bottom", Shown ? 0 : 25, 0.25);
+        tween
+            .Chain()
+            .TweenCallback(
+                Callable.From(() =>
+                {
+                    Visible = Shown;
+                })
+            );
+    }
+
+    public void HideMenu()
+    {
+        ShowMenu(false);
+    }
+
+    public void SelectCategory(ScrollContainer category)
+    {
+        if (selectedCategory != null)
+        {
+            sidebar.GetNode<ColorRect>(new(selectedCategory.Name)).Color = Color.Color8(255, 255, 255, 0);
+            selectedCategory.Visible = false;
+        }
+
+        selectedCategory = category;
+
+        selectedCategory.Visible = true;
+        sidebar.GetNode<ColorRect>(new(selectedCategory.Name)).Color = Color.Color8(255, 255, 255, 8);
+    }
+
+    public void UpdateProfileSelection()
+    {
+        // skip default
+        for (int i = 1; i < profilesButton.ItemCount; i++)
+        {
+            profilesButton.RemoveItem(i);
+        }
+
+        string current = SettingsManager.GetCurrentProfile();
+        string[] profiles = Directory.GetFiles($"{Constants.USER_FOLDER}/profiles");
+
+        // add custom profiles to item list
+        for (int i = 0; i < profiles.Length; i++)
+        {
+            string name = profiles[i].GetFile().GetBaseName();
+
+            if (name != "default")
+            {
+                profilesButton.AddItem(name);
+            }
+        }
+
+        // item indices don't always match file order
+        for (int i = 0; i < profilesButton.ItemCount; i++)
+        {
+            string name = profilesButton.GetItemText(i);
+
+            if (name == current)
+            {
+                profilesButton.Select(i);
+            }
+        }
+    }
+
+    private static void setupToggle(ISettingsItem setting, CheckButton button)
+    {
+        button.Toggled += value =>
+        {
+            if ((bool)setting.GetVariant() != value)
+            {
+                setting.SetVariant(value);
+            }
+        };
+
+        setting.Updated += value => updateToggle(button, (bool)value);
+
+        updateToggle(button, (bool)setting.GetVariant());
+    }
+
+    private static void updateToggle(CheckButton button, bool value)
+    {
+        button.ButtonPressed = value;
+    }
+
+    private void setupSlider(ISettingsItem setting, HSlider slider, LineEdit lineEdit)
+    {
+        void applyLineEdit()
+        {
+            if (!double.TryParse(lineEdit.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out double value))
+            {
+                value = double.Parse(lineEdit.PlaceholderText, CultureInfo.InvariantCulture);
+            }
+
+            if ((double)setting.GetVariant() != value)
+            {
+                setting.SetVariant(value);
+            }
+        }
+
+        double placeholder = 0;
+
+        if (setting is SettingsItem<double>)
+        {
+            placeholder = (setting as SettingsItem<double>).DefaultValue;
+        }
+        else if (setting is SettingsItem<int>)
+        {
+            placeholder = (setting as SettingsItem<int>).DefaultValue;
+        }
+
+        lineEdit.PlaceholderText = placeholder.ToString("F4", CultureInfo.InvariantCulture);
+        slider.Step = setting.Slider.Step;
+        slider.MinValue = setting.Slider.MinValue;
+        slider.MaxValue = setting.Slider.MaxValue;
+
+        lineEdit.FocusExited += applyLineEdit;
+        lineEdit.TextSubmitted += (_) =>
+        {
+            applyLineEdit();
+        };
+        slider.ValueChanged += value =>
+        {
+            if ((double)setting.GetVariant() != value)
+            {
+                setting.SetVariant(value);
+            }
+        };
+
+        setting.Updated += (value) =>
+        {
+            updateSlider(slider, lineEdit, (double)value);
+        };
+
+        updateSlider(slider, lineEdit, (double)setting.GetVariant());
+    }
+
+    private static void updateSlider(HSlider slider, LineEdit lineEdit, double value)
+    {
+        value = Math.Round(value * 1000) / 1000;
+        lineEdit.Text = value.ToString(CultureInfo.InvariantCulture);
+
+        if (lineEdit.IsInsideTree())
+        {
+            lineEdit.ReleaseFocus();
+        }
+
+        slider.SetValueNoSignal(value);
+    }
+
+    private void setupInput(ISettingsItem setting, LineEdit lineEdit)
+    {
+        void applyLineEdit()
+        {
+            string value = (lineEdit.Text == "" ? lineEdit.PlaceholderText : lineEdit.Text);
+
+            if ((string)setting.GetVariant() != value)
+            {
+                setting.SetVariant(value);
+            }
+        }
+
+        if (setting.Placeholder != "")
+        {
+            lineEdit.PlaceholderText = setting.Placeholder;
+        }
+
+        lineEdit.FocusExited += applyLineEdit;
+        lineEdit.TextSubmitted += (_) =>
+        {
+            applyLineEdit();
+        };
+
+        setting.Updated += (value) =>
+        {
+            updateInput(lineEdit, (string)value);
+        };
+
+        updateInput(lineEdit, (string)setting.GetVariant());
+    }
+
+    private static void updateInput(LineEdit lineEdit, string input)
+    {
+        lineEdit.Text = input;
+
+        if (lineEdit.IsInsideTree())
+        {
+            lineEdit.ReleaseFocus();
+        }
+    }
+
+    private static void setupList(ISettingsItem setting, OptionButton optionButton)
+    {
+        foreach (Variant item in setting.List.Values)
+        {
+            optionButton.AddItem((string)item);
+        }
+
+        optionButton.ItemSelected += (id) =>
+        {
+            string oldVal = (string)setting.GetVariant();
+            string newVal = (string)setting.List.Values[(int)id];
+
+            if (oldVal != newVal)
+            {
+                setting.SetVariant(newVal);
+            }
+        };
+
+        int getIndex()
+        {
+            int index = 0;
+
+            foreach (string value in setting.List.Values.Select(v => (string)v))
+            {
+                if (value == (string)setting.List.SelectedValue)
+                {
+                    break;
+                }
+
+                index++;
+            }
+
+            return index;
+        }
+
+        setting.Updated += (_) =>
+        {
+            updateList(optionButton, getIndex());
+        };
+
+        updateList(optionButton, getIndex());
+    }
+
+    private static void updateList(OptionButton optionButton, int index)
+    {
+        optionButton.Selected = index;
+    }
+
+    private static void setupButton(SettingsButton setting, Button button)
+    {
+        button.Visible = true;
+        button.Text = setting.Title;
+        button.TooltipText = setting.Description;
+        button.Visible = true;
+
+        ulong lastPressedAt = 0;
+        button.Pressed += () =>
+        {
+            ulong now = Time.GetTicksMsec();
+            if (now - lastPressedAt < 250)
+            {
+                return;
+            }
+
+            lastPressedAt = now;
+            setting.OnPressed?.Invoke();
+        };
+    }
+
+    public void RefreshList(ISettingsItem setting)
+    {
+        OptionButton optionButton = settingPanels[setting.Id].GetNode<OptionButton>("OptionButton");
+        optionButton.Clear();
+
+        foreach (Variant item in setting.List.Values)
+        {
+            optionButton.AddItem(item.AsString());
+        }
+    }
+}

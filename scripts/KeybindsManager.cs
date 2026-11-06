@@ -1,0 +1,70 @@
+using System.Globalization;
+using Godot;
+
+public partial class KeybindsManager : Node
+{
+    private const string wikiLink = "https://wiki.tyanitia.net";
+    private OptionPopup wikiPopup;
+    private static float volumeBeforeMute = -1;
+
+    public override void _Ready()
+    {
+        wikiPopup = new("Open Tyanitia Wiki", string.Format(CultureInfo.CurrentCulture, LinkPopupButton.InfoTemplate, wikiLink));
+
+        wikiPopup.AddOption(
+            "Open",
+            Callable.From(() =>
+            {
+                OS.ShellOpen(wikiLink);
+            }),
+            wikiLink
+        );
+        wikiPopup.AddOption("Cancel", Callable.From(wikiPopup.Hide));
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        var settings = SettingsManager.Instance.Settings;
+
+        if (@event is InputEventKey eventKey && eventKey.Pressed)
+        {
+            switch (eventKey.Keycode)
+            {
+                case Key.F1:
+                {
+                    if (!Game.Instance?.Runner?.Playing ?? true)
+                    {
+                        wikiPopup.Show(!wikiPopup.Shown);
+                    }
+                    break;
+                }
+                default:
+                {
+                    if (eventKey.Keycode == Key.F11 || (eventKey.AltPressed && (eventKey.Keycode == Key.Enter || eventKey.Keycode == Key.KpEnter)))
+                    {
+                        bool value = DisplayServer.WindowGetMode() == DisplayServer.WindowMode.Windowed;
+
+                        settings.Fullscreen.Value = value;
+                    }
+                    break;
+                }
+            }
+
+            if (eventKey.CtrlPressed && eventKey.Keycode == Key.M)
+            {
+                if (volumeBeforeMute < 0)
+                {
+                    volumeBeforeMute = (float)settings.VolumeMaster.Value;
+                    settings.VolumeMaster.Value = 0;
+                }
+                else
+                {
+                    settings.VolumeMaster.Value = volumeBeforeMute;
+                    volumeBeforeMute = -1;
+                }
+
+                SoundManager.UpdateVolume();
+            }
+        }
+    }
+}

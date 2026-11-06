@@ -1,0 +1,98 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="Tyanitia"
+config/version="0.1.1"
+run/main_scene="uid://cyrs54b4ot1p8"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Tyanitia"
+config/quit_on_go_back=false
+config/features=PackedStringArray("4.7", "C#", "Forward Plus")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=false
+boot_splash/image="res://textures/boot_splash.png"
+config/icon="res://textures/TyanitiaSquircle.png"
+
+[audio]
+
+buses/default_bus_layout="uid://byxtiup0hs2og"
+
+[autoload]
+
+Constants="*res://scripts/Constants.cs"
+FileInitializer="*uid://dp48xgqpesoue"
+DatabaseService="*uid://c4t8bmpg1wmnv"
+SettingsManager="*res://scripts/SettingsManager.cs"
+SkinManager="*res://scripts/skinning/SkinManager.cs"
+MapManager="*uid://4by8r55q4bwn"
+KeybindsManager="*res://scripts/KeybindsManager.cs"
+Tyanitia="*res://scripts/Tyanitia.cs"
+Lobby="*res://scripts/multiplayer/Lobby.cs"
+SoundManager="*res://scripts/SoundManager.cs"
+ToastNotification="*res://scripts/ui/ToastNotification.cs"
+MapParser="*res://scripts/map/MapParser.cs"
+
+[debug]
+
+file_logging/enable_file_logging=true
+
+[display]
+
+window/handheld/orientation=4
+window/size/viewport_width=1600
+window/size/viewport_width.mobile=1280
+window/size/viewport_height=900
+window/size/viewport_height.mobile=720
+
+[dotnet]
+
+project/assembly_name="Tyanitia"
+
+[editor_plugins]
+
+enabled=PackedStringArray()
+
+[file_customization]
+
+folder_colors={
+"res://user/": "pink"
+}
+
+[gui]
+
+timers/tooltip_delay_sec=0.1
+
+[input_devices]
+
+buffering/agile_event_flushing=true
+
+pointing/android/enable_long_press_as_right_click=true
+pointing/emulate_mouse_from_touch=true
+
+[internationalization]
+
+rendering/root_node_layout_direction=1
+
+[physics]
+
+common/physics_ticks_per_second=120
+
+[rendering]
+
+renderer/rendering_method.mobile="mobile"
+textures/vram_compression/import_etc2_astc=true
+textures/lossless_compression/force_png=true
+environment/defaults/default_clear_color=Color(0.0885599, 0.08855992, 0.08855987, 1)

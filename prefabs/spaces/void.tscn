@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dfr03mt0m4f8t"]
+
+[ext_resource type="Script" uid="uid://dhq7mkhlfw5ci" path="res://scripts/spaces/Void.cs" id="1_31nrd"]
+
+[sub_resource type="Environment" id="Environment_uposg"]
+resource_local_to_scene = true
+background_mode = 1
+
+[node name="Void" type="Node3D" unique_id=5537677]
+script = ExtResource("1_31nrd")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=532696618]
+environment = SubResource("Environment_uposg")

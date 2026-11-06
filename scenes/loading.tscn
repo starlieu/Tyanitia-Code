@@ -1,0 +1,139 @@
+[gd_scene format=3 uid="uid://dhsbxdw3kleyx"]
+
+[ext_resource type="Script" uid="uid://dpvrcewd6adj4" path="res://scripts/scenes/Loading.cs" id="1_dhqfv"]
+[ext_resource type="Shader" uid="uid://ujothoxymyrm" path="res://scripts/shaders/uv_split.gdshader" id="2_dhqfv"]
+[ext_resource type="Texture2D" uid="uid://qypjgqt3ct5j" path="res://textures/boot_splash.png" id="2_yt702"]
+[ext_resource type="FontFile" uid="uid://bopde8iqsld1o" path="res://fonts/Ubuntu/Ubuntu-Regular.ttf" id="4_2ytni"]
+[ext_resource type="Shader" uid="uid://cxckrd6xtplnx" path="res://scripts/shaders/jukebox_progress.gdshader" id="4_yt702"]
+[ext_resource type="Script" uid="uid://dx2wecnf76cyo" path="res://scripts/ui/AudioSpectrum.cs" id="5_2ytni"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dhqfv"]
+shader = ExtResource("2_dhqfv")
+shader_parameter/split = 0.400000019
+shader_parameter/shift = 1.0
+shader_parameter/angle = 0.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_nxo4k"]
+font = ExtResource("4_2ytni")
+font_color = Color(1, 1, 1, 0.8627451)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ytni"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.0, 0.88, 0.80, 1)
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nxo4k"]
+bg_color = Color(0.0, 0.88, 0.80, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nxo4k"]
+shader = ExtResource("4_yt702")
+shader_parameter/color_fill = Color(0.0, 0.88, 0.80, 1)
+shader_parameter/color_background = Color(0.02745, 0.1608, 0.1647, 0.74509805)
+shader_parameter/progress = 0.0
+shader_parameter/margin = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c856a"]
+bg_color = Color(1, 1, 1, 1)
+draw_center = false
+
+[node name="SceneLoading" type="Node" unique_id=894859233 node_paths=PackedStringArray("background", "splash", "progressLabel", "progressBar", "progressBarFill")]
+script = ExtResource("1_dhqfv")
+background = NodePath("Background")
+splash = NodePath("Splash")
+progressLabel = NodePath("ProgressLabel")
+progressBar = NodePath("ProgressBar")
+progressBarFill = NodePath("ProgressBar/Fill")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1414322225]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Splash" type="TextureRect" parent="." unique_id=138854244]
+anchors_preset = -1
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_yt702")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProgressLabel" type="Label" parent="." unique_id=1976898353]
+visible = false
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.9
+anchor_right = 0.5
+anchor_bottom = 0.9
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Initializing maps"
+label_settings = SubResource("LabelSettings_nxo4k")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="Panel" parent="." unique_id=276017175]
+visible = false
+anchors_preset = -1
+anchor_left = 0.4
+anchor_top = 0.9
+anchor_right = 0.6
+anchor_bottom = 0.9
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2ytni")
+
+[node name="Fill" type="Panel" parent="ProgressBar" unique_id=498268785]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nxo4k")
+
+[node name="Spectrum" type="Panel" parent="." unique_id=797692806]
+visible = false
+material = SubResource("ShaderMaterial_nxo4k")
+anchors_preset = -1
+anchor_top = 0.8
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c856a")
+script = ExtResource("5_2ytni")
+MinFreq = 0
+MaxFreq = 10500
+BarColor = Color(1, 1, 1, 0.1254902)
+BarSize = 6.0
+BarMinSize = 1.0
+Align = 1.0
+
+[node name="Transition" type="ColorRect" parent="." unique_id=472667306]
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

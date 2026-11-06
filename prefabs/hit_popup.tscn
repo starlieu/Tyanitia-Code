@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://0m41bf4nt5cr"]
+
+[ext_resource type="FontFile" uid="uid://dvb6fvy008bhv" path="res://fonts/Roboto/Roboto-Medium.ttf" id="1_65qcu"]
+
+[node name="HitPopup" type="Label3D" unique_id=943142641]
+modulate = Color(1, 1, 1, 0.47058824)
+outline_modulate = Color(0, 0, 0, 0)
+text = "100"
+font = ExtResource("1_65qcu")
