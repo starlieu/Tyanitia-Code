@@ -38,6 +38,7 @@
 [ext_resource type="Texture2D" uid="uid://b44v7e2jfwmkn" path="res://user/skins/default/ui/buttons/random.png" id="27_tgcit"]
 [ext_resource type="Script" uid="uid://d36x1ln46itd1" path="res://scripts/ui/menu/play/RandomPickButton.cs" id="27_u43bj"]
 [ext_resource type="Script" uid="uid://nob6vs2h1mwj" path="res://scripts/ui/menu/ImportButton.cs" id="28_eku7s"]
+[ext_resource type="Script" path="res://scripts/ui/menu/OnlineMapBrowser.cs" id="28_online_maps"]
 [ext_resource type="Shader" uid="uid://rngh60dyh10b" path="res://scripts/shaders/outline.gdshader" id="30_q13xq"]
 [ext_resource type="Texture2D" uid="uid://bfy3x7rqnts4i" path="res://user/skins/default/ui/buttons/filter.png" id="31_5053t"]
 [ext_resource type="Texture2D" uid="uid://bl6ten82nkjmd" path="res://user/skins/default/ui/buttons/sort.png" id="32_2wgix"]
@@ -732,6 +733,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("22_qw82i")
 
+[node name="OnlineMapBrowser" type="Control" parent="Menus/Play"]
+visible = false
+z_index = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("28_online_maps")
+
 [node name="Holder" type="Panel" parent="Menus/Play/MapInfo" unique_id=981210358]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -807,6 +819,15 @@ access = 2
 filters = PackedStringArray("*.sspm", "*.phxm", "*.txt", "*.rhm")
 use_native_dialog = true
 script = ExtResource("2_yxnar")
+
+[node name="OnlineMaps" type="Button" parent="Menus/Play/SubTopBar/HBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("6_engjn")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Online Maps"
 
 [node name="Random" type="Button" parent="Menus/Play/SubTopBar/HBoxContainer" unique_id=1089194663]
 custom_minimum_size = Vector2(0, 36)

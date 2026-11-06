@@ -2,6 +2,8 @@
 
 Tyanitia is a free-to-play rhythm game where you move your mouse across a 3×3 grid. This project is an open-source client rebrand built with Godot 4.7 and C#. It retains the source project's license; see [LICENSE](LICENSE).
 
+The Play menu's **Online Maps** browser lets you search maps and mappers, filter by notable mapper and verification status, sort results, and download maps into your library.
+
 ## Downloads
 
 You can find them on ([release page](https://github.com/starlieu/Tyanitia-Code/releases/))
@@ -68,4 +70,3 @@ The **Video** settings offer Forward+, Mobile, and Compatibility rendering. Godo
 - `scripts/` — C# application, gameplay, settings, and platform integration.
 - `textures/`, `sounds/`, `fonts/`, and `themes/` — game assets.
 - `export_presets.cfg` — Windows, Linux, macOS, and Android export presets.
-

@@ -13,6 +13,7 @@ public partial class MainMenu : BaseScene
     public JukeboxPanel Jukebox;
     public MapList MapList;
     public MapInfo MapInfo;
+    public OnlineMapBrowser OnlineMapBrowser;
 
     private Panel menuHolder;
     private Node topBarButtonsContainer;
@@ -32,6 +33,8 @@ public partial class MainMenu : BaseScene
         Jukebox = GetNode<JukeboxPanel>("JukeboxPanel");
         MapList = PlayMenu.GetNode<MapList>("MapList");
         MapInfo = PlayMenu.GetNode<MapInfo>("MapInfo");
+        OnlineMapBrowser = PlayMenu.GetNode<OnlineMapBrowser>("OnlineMapBrowser");
+        PlayMenu.GetNode<Button>("SubTopBar/HBoxContainer/OnlineMaps").Pressed += OnlineMapBrowser.Open;
 
         CurrentMenu = HomeMenu;
 
