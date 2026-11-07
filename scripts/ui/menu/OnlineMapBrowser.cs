@@ -77,7 +77,7 @@ public partial class OnlineMapBrowser : Control
     {
         if (Visible && @event is InputEventKey { Pressed: true, Keycode: Key.Escape })
         {
-            Visible = false;
+            CloseBrowser();
             GetViewport().SetInputAsHandled();
         }
     }
@@ -141,7 +141,7 @@ public partial class OnlineMapBrowser : Control
             Icon = TyanitiaIcons.Get("import"),
             CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 150 : 132, MobileUi.IsMobile ? 60 : 44),
         };
-        importButton.Pressed += () => ImportDialog.Show();
+        importButton.Pressed += () => ImportDialog?.Show();
         header.AddChild(importButton);
 
         reloadButton = new Button
@@ -159,7 +159,7 @@ public partial class OnlineMapBrowser : Control
             Icon = TyanitiaIcons.Get("quit"),
             CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 116 : 96, MobileUi.IsMobile ? 60 : 44),
         };
-        closeButton.Pressed += () => Visible = false;
+        closeButton.Pressed += CloseBrowser;
         header.AddChild(closeButton);
 
         HBoxContainer searchRow = new();
@@ -291,7 +291,7 @@ public partial class OnlineMapBrowser : Control
         pagination.AddChild(nextButton);
 
         searchTimer = new Timer { OneShot = true, WaitTime = 0.35 };
-        searchTimer.Timeout += LoadMaps;
+        searchTimer.Timeout += SubmitScheduledSearch;
         AddChild(searchTimer);
     }
 
@@ -313,16 +313,13 @@ public partial class OnlineMapBrowser : Control
 
     private void ScheduleSearch(string _)
     {
-        offset = 0;
-        requestGeneration++;
-        CancelCatalogRequest();
-        isLoading = true;
-        reloadButton.Disabled = true;
-        previousButton.Disabled = true;
-        nextButton.Disabled = true;
-        statusLabel.Text = "Waiting to search...";
-        ClearResults();
         searchTimer.Start();
+    }
+
+    private void SubmitScheduledSearch()
+    {
+        offset = 0;
+        LoadMaps();
     }
 
     private void SubmitSearch()
@@ -331,6 +328,13 @@ public partial class OnlineMapBrowser : Control
         offset = 0;
         search.ReleaseFocus();
         LoadMaps();
+    }
+
+    private void CloseBrowser()
+    {
+        searchTimer?.Stop();
+        search?.ReleaseFocus();
+        Visible = false;
     }
 
     private void ClearResults()
@@ -412,6 +416,12 @@ public partial class OnlineMapBrowser : Control
             request.QueueFree();
             if (generation != requestGeneration)
             {
+                if (ReferenceEquals(catalogRequest, request))
+                {
+                    catalogRequest = null;
+                    isLoading = false;
+                    UpdatePageButtons();
+                }
                 return;
             }
 
@@ -553,6 +563,7 @@ public partial class OnlineMapBrowser : Control
     {
         return element.ValueKind == JsonValueKind.Object
             && element.TryGetProperty(property, out JsonElement value)
+            && value.ValueKind == JsonValueKind.Number
             && value.TryGetInt32(out int result)
             ? result
             : 0;
@@ -755,8 +766,9 @@ public partial class OnlineMapBrowser : Control
 
     private void UpdatePageButtons()
     {
-        previousButton.Disabled = offset == 0;
-        nextButton.Disabled = offset + maps.Count >= totalMaps;
+        previousButton.Disabled = isLoading || offset == 0;
+        nextButton.Disabled = isLoading || offset + maps.Count >= totalMaps;
+        reloadButton.Disabled = isLoading;
     }
 
     private static bool TryGetApiUrl(string path, out string url)
