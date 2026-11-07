@@ -162,6 +162,10 @@ public partial class OnlineMapBrowser : Control
         closeButton.Pressed += () => Visible = false;
         header.AddChild(closeButton);
 
+        HBoxContainer searchRow = new();
+        searchRow.AddThemeConstantOverride("separation", MobileUi.IsMobile ? 8 : 10);
+        layout.AddChild(searchRow);
+
         search = new LineEdit
         {
             PlaceholderText = "Search maps, mappers, or difficulty...",
@@ -169,12 +173,18 @@ public partial class OnlineMapBrowser : Control
             CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 60 : 42),
             SizeFlagsHorizontal = SizeFlags.ExpandFill,
         };
-        search.TextChanged += _ =>
+        search.TextChanged += ScheduleSearch;
+        search.TextSubmitted += _ => SubmitSearch();
+        searchRow.AddChild(search);
+
+        Button searchButton = new()
         {
-            offset = 0;
-            searchTimer.Start();
+            Text = "Search",
+            Icon = TyanitiaIcons.Get("search"),
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 128 : 104, MobileUi.IsMobile ? 60 : 42),
         };
-        layout.AddChild(search);
+        searchButton.Pressed += SubmitSearch;
+        searchRow.AddChild(searchButton);
 
         HFlowContainer filters = new();
         filters.AddThemeConstantOverride("h_separation", MobileUi.IsMobile ? 8 : 12);
@@ -301,6 +311,50 @@ public partial class OnlineMapBrowser : Control
         LoadMaps();
     }
 
+    private void ScheduleSearch(string _)
+    {
+        offset = 0;
+        requestGeneration++;
+        CancelCatalogRequest();
+        isLoading = true;
+        reloadButton.Disabled = true;
+        previousButton.Disabled = true;
+        nextButton.Disabled = true;
+        statusLabel.Text = "Waiting to search...";
+        ClearResults();
+        searchTimer.Start();
+    }
+
+    private void SubmitSearch()
+    {
+        searchTimer.Stop();
+        offset = 0;
+        search.ReleaseFocus();
+        LoadMaps();
+    }
+
+    private void ClearResults()
+    {
+        maps.Clear();
+        totalMaps = 0;
+        foreach (Node child in results.GetChildren())
+        {
+            child.QueueFree();
+        }
+        pageLabel.Text = "0 maps";
+        resultsScroll.ScrollVertical = 0;
+    }
+
+    private void CancelCatalogRequest()
+    {
+        if (catalogRequest != null && IsInstanceValid(catalogRequest))
+        {
+            catalogRequest.CancelRequest();
+            catalogRequest.QueueFree();
+            catalogRequest = null;
+        }
+    }
+
     private void LoadMaps()
     {
         if (!IsInsideTree())
@@ -308,19 +362,16 @@ public partial class OnlineMapBrowser : Control
             return;
         }
 
+        searchTimer?.Stop();
         int generation = ++requestGeneration;
-        if (catalogRequest != null && IsInstanceValid(catalogRequest))
-        {
-            catalogRequest.CancelRequest();
-            catalogRequest.QueueFree();
-            catalogRequest = null;
-        }
+        CancelCatalogRequest();
 
         isLoading = true;
         reloadButton.Disabled = true;
         previousButton.Disabled = true;
         nextButton.Disabled = true;
         statusLabel.Text = "Loading maps...";
+        ClearResults();
 
         List<string> query = [$"limit={pageSize}", $"offset={offset}"];
         string searchText = search.Text.Trim();
