@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tyanitia")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ee4711a7782ef123a5c67505fcc5ed6580f20c32")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12031a82fe3fde103ef35607334914aaee0113c3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tyanitia")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tyanitia")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
