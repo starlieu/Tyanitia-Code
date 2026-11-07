@@ -12,6 +12,8 @@ public partial class OnlineMapBrowser : Control
     private const string ApiUrl = "https://rhythia-api.nyarw.moe/maps/";
     private const string ApiHost = "rhythia-api.nyarw.moe";
 
+    public FileDialog ImportDialog { get; set; }
+
     private sealed class OnlineMap
     {
         public string Id { get; init; } = "";
@@ -132,6 +134,15 @@ public partial class OnlineMapBrowser : Control
         };
         title.AddThemeFontSizeOverride("font_size", MobileUi.IsMobile ? 30 : 26);
         header.AddChild(title);
+
+        Button importButton = new()
+        {
+            Text = "Import Map",
+            Icon = TyanitiaIcons.Get("import"),
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 150 : 132, MobileUi.IsMobile ? 60 : 44),
+        };
+        importButton.Pressed += () => ImportDialog.Show();
+        header.AddChild(importButton);
 
         reloadButton = new Button
         {

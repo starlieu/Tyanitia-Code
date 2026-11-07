@@ -65,7 +65,14 @@ public partial class MainMenu : BaseScene
         MapList = PlayMenu.GetNode<MapList>("MapList");
         MapInfo = PlayMenu.GetNode<MapInfo>("MapInfo");
 
-        OnlineMapBrowser = new OnlineMapBrowser { Name = "OnlineMapBrowser", Visible = false, ZIndex = 10 };
+        FileDialog importDialog = PlayMenu.GetNode<Button>("SubTopBar/HBoxContainer/Import").GetNode<FileDialog>("ImportDialog");
+        OnlineMapBrowser = new OnlineMapBrowser
+        {
+            Name = "OnlineMapBrowser",
+            Visible = false,
+            ZIndex = 10,
+            ImportDialog = importDialog,
+        };
         PlayMenu.AddChild(OnlineMapBrowser);
         OnlineMapBrowser.AnchorLeft = 0;
         OnlineMapBrowser.AnchorTop = 0;
