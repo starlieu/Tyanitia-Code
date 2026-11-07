@@ -10,37 +10,56 @@ using Godot;
 public partial class OnlineMapBrowser : Control
 {
     private const string ApiUrl = "https://rhythia-api.nyarw.moe/maps/";
+    private const string ApiHost = "rhythia-api.nyarw.moe";
 
     private sealed class OnlineMap
     {
         public string Id { get; init; } = "";
         public string Title { get; init; } = "";
         public string Artist { get; init; } = "";
+        public string DifficultyName { get; init; } = "";
         public string Status { get; init; } = "";
         public string FileUrl { get; init; } = "";
+        public string CoverUrl { get; init; } = "";
         public string[] Mappers { get; init; } = [];
         public bool IsVerified { get; init; }
         public bool HasNotableMapper { get; init; }
         public int Difficulty { get; init; }
         public int Length { get; init; }
-        public DateTimeOffset CreatedAt { get; init; }
+        public int NoteCount { get; init; }
     }
 
     private readonly List<OnlineMap> maps = [];
-    private LineEdit mapSearch;
-    private LineEdit mapperSearch;
-    private OptionButton notableFilter;
-    private OptionButton verifiedFilter;
-    private OptionButton sortOrder;
+    private LineEdit search;
+    private OptionButton difficultyFilter;
+    private OptionButton sortDirection;
+    private OptionButton pageSizePicker;
+    private CheckButton verifiedOnly;
+    private CheckButton notableOnly;
     private Label statusLabel;
-    private VBoxContainer results;
+    private Label pageLabel;
+    private GridContainer results;
+    private ScrollContainer resultsScroll;
+    private Button previousButton;
+    private Button nextButton;
     private Button reloadButton;
+    private Timer searchTimer;
+    private HttpRequest catalogRequest;
+    private int requestGeneration;
+    private int renderGeneration;
+    private int totalMaps;
+    private int offset;
+    private int pageSize;
     private bool isLoading;
 
     public override void _Ready()
     {
         MouseFilter = MouseFilterEnum.Stop;
         BuildInterface();
+        pageSize = MobileUi.IsMobile ? 8 : 18;
+        pageSizePicker.Select(pageSizePicker.GetItemIndex(pageSize));
+        results.Resized += UpdateColumnCount;
+        Callable.From(UpdateColumnCount).CallDeferred();
     }
 
     public void Open()
@@ -49,10 +68,6 @@ public partial class OnlineMapBrowser : Control
         if (maps.Count == 0)
         {
             LoadMaps();
-        }
-        else
-        {
-            UpdateResults();
         }
     }
 
@@ -69,158 +84,296 @@ public partial class OnlineMapBrowser : Control
     {
         ColorRect backdrop = new()
         {
-            Color = new Color(0, 0, 0, 0.78f),
+            Color = new Color(0, 0, 0, 0.88f),
             MouseFilter = MouseFilterEnum.Stop,
         };
+        backdrop.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         AddChild(backdrop);
-        backdrop.AnchorRight = 1;
-        backdrop.AnchorBottom = 1;
 
         PanelContainer dialog = new()
         {
-            AnchorLeft = MobileUi.IsMobile ? 0.02f : 0.06f,
-            AnchorTop = MobileUi.IsMobile ? 0.02f : 0.06f,
-            AnchorRight = MobileUi.IsMobile ? 0.98f : 0.94f,
-            AnchorBottom = MobileUi.IsMobile ? 0.98f : 0.94f,
+            AnchorLeft = MobileUi.IsMobile ? 0.015f : 0.025f,
+            AnchorTop = MobileUi.IsMobile ? 0.015f : 0.025f,
+            AnchorRight = MobileUi.IsMobile ? 0.985f : 0.975f,
+            AnchorBottom = MobileUi.IsMobile ? 0.985f : 0.975f,
             MouseFilter = MouseFilterEnum.Stop,
         };
         StyleBoxFlat panelStyle = new()
         {
-            BgColor = new Color("0a111b"),
-            BorderColor = new Color("328c8f"),
-            BorderWidthLeft = 1, BorderWidthTop = 1, BorderWidthRight = 1, BorderWidthBottom = 1,
-            CornerRadiusTopLeft = 18,
-            CornerRadiusTopRight = 18,
-            CornerRadiusBottomLeft = 18,
-            CornerRadiusBottomRight = 18,
-            ContentMarginLeft = MobileUi.IsMobile ? 22 : 18,
-            ContentMarginTop = MobileUi.IsMobile ? 18 : 14,
-            ContentMarginRight = MobileUi.IsMobile ? 22 : 18,
-            ContentMarginBottom = MobileUi.IsMobile ? 18 : 14,
+            BgColor = new Color(0.015f, 0.015f, 0.02f, 1),
+            BorderColor = new Color("343434"),
+            BorderWidthLeft = 1,
+            BorderWidthTop = 1,
+            BorderWidthRight = 1,
+            BorderWidthBottom = 1,
+            CornerRadiusTopLeft = 8,
+            CornerRadiusTopRight = 8,
+            CornerRadiusBottomLeft = 8,
+            CornerRadiusBottomRight = 8,
+            ContentMarginLeft = MobileUi.IsMobile ? 14 : 18,
+            ContentMarginTop = MobileUi.IsMobile ? 10 : 14,
+            ContentMarginRight = MobileUi.IsMobile ? 14 : 18,
+            ContentMarginBottom = MobileUi.IsMobile ? 10 : 14,
         };
         dialog.AddThemeStyleboxOverride("panel", panelStyle);
         AddChild(dialog);
 
         VBoxContainer layout = new() { Theme = GD.Load<Theme>("res://themes/theme.tres") };
-        layout.AddThemeConstantOverride("separation", MobileUi.IsMobile ? 12 : 10);
+        layout.AddThemeConstantOverride("separation", MobileUi.IsMobile ? 8 : 10);
         dialog.AddChild(layout);
 
         HBoxContainer header = new();
         layout.AddChild(header);
         Label title = new()
         {
-            Text = "ONLINE MAPS",
+            Text = "MAP BROWSER",
             SizeFlagsHorizontal = SizeFlags.ExpandFill,
             VerticalAlignment = VerticalAlignment.Center,
         };
         title.AddThemeFontSizeOverride("font_size", MobileUi.IsMobile ? 30 : 26);
         header.AddChild(title);
 
-        reloadButton = new Button { Text = "Refresh", Icon = TyanitiaIcons.Get("random"), CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 150 : 112, MobileUi.IsMobile ? 64 : 44) };
-        reloadButton.AddThemeConstantOverride("icon_max_width", 25);
+        reloadButton = new Button
+        {
+            Text = "Refresh",
+            Icon = TyanitiaIcons.Get("random"),
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 132 : 112, MobileUi.IsMobile ? 60 : 44),
+        };
         reloadButton.Pressed += LoadMaps;
         header.AddChild(reloadButton);
 
-        Button closeButton = new() { Text = "Close", Icon = TyanitiaIcons.Get("quit"), CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 140 : 100, MobileUi.IsMobile ? 64 : 44) };
-        closeButton.AddThemeConstantOverride("icon_max_width", 25);
+        Button closeButton = new()
+        {
+            Text = "Close",
+            Icon = TyanitiaIcons.Get("quit"),
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 116 : 96, MobileUi.IsMobile ? 60 : 44),
+        };
         closeButton.Pressed += () => Visible = false;
         header.AddChild(closeButton);
 
-        HBoxContainer searches = new();
-        searches.AddThemeConstantOverride("separation", 8);
-        layout.AddChild(searches);
-
-        mapSearch = new LineEdit
+        search = new LineEdit
         {
-            PlaceholderText = "Search map title or artist",
-            SizeFlagsHorizontal = SizeFlags.ExpandFill,
+            PlaceholderText = "Search maps, mappers, or difficulty...",
             ClearButtonEnabled = true,
-            CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 64 : 44),
+            CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 60 : 42),
+            SizeFlagsHorizontal = SizeFlags.ExpandFill,
         };
-        mapSearch.TextChanged += _ => UpdateResults();
-        searches.AddChild(mapSearch);
-
-        mapperSearch = new LineEdit
+        search.TextChanged += _ =>
         {
-            PlaceholderText = "Search mapper",
-            SizeFlagsHorizontal = SizeFlags.ExpandFill,
-            ClearButtonEnabled = true,
-            CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 64 : 44),
+            offset = 0;
+            searchTimer.Start();
         };
-        mapperSearch.TextChanged += _ => UpdateResults();
-        searches.AddChild(mapperSearch);
+        layout.AddChild(search);
 
         HFlowContainer filters = new();
-        filters.AddThemeConstantOverride("separation", 8);
+        filters.AddThemeConstantOverride("h_separation", MobileUi.IsMobile ? 8 : 12);
+        filters.AddThemeConstantOverride("v_separation", 6);
         layout.AddChild(filters);
-        AddFilter(filters, "Notable mapper", ["Any", "Notable", "Not notable"], out notableFilter);
-        AddFilter(filters, "Verification", ["Any", "Verified", "Unverified"], out verifiedFilter);
-        AddFilter(filters, "Sort", ["Newest", "Title A-Z", "Title Z-A", "Difficulty"], out sortOrder);
 
-        notableFilter.ItemSelected += _ => UpdateResults();
-        verifiedFilter.ItemSelected += _ => UpdateResults();
-        sortOrder.ItemSelected += _ => UpdateResults();
+        difficultyFilter = new OptionButton
+        {
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 184 : 150, MobileUi.IsMobile ? 58 : 40),
+        };
+        difficultyFilter.AddItem("All difficulties", -1);
+        for (int i = 0; i < Constants.DIFFICULTIES.Length; i++)
+        {
+            difficultyFilter.AddItem(Constants.DIFFICULTIES[i], i);
+        }
+        difficultyFilter.ItemSelected += _ => ReloadFromStart();
+        filters.AddChild(difficultyFilter);
 
-        statusLabel = new Label { Text = "Connect to the map service to browse maps." };
+        sortDirection = new OptionButton
+        {
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 164 : 144, MobileUi.IsMobile ? 58 : 40),
+        };
+        sortDirection.AddItem("Recently added", 0);
+        sortDirection.AddItem("Oldest first", 1);
+        sortDirection.ItemSelected += _ => ReloadFromStart();
+        filters.AddChild(sortDirection);
+
+        pageSizePicker = new OptionButton
+        {
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 150 : 128, MobileUi.IsMobile ? 58 : 40),
+        };
+        foreach (int count in MobileUi.IsMobile ? new[] { 8, 18 } : new[] { 8, 18, 36 })
+        {
+            pageSizePicker.AddItem($"{count} per page", count);
+        }
+        pageSizePicker.ItemSelected += index =>
+        {
+            pageSize = pageSizePicker.GetItemId((int)index);
+            ReloadFromStart();
+        };
+        filters.AddChild(pageSizePicker);
+
+        verifiedOnly = new CheckButton
+        {
+            Text = "Verified only",
+            CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 58 : 40),
+        };
+        verifiedOnly.Toggled += _ => ReloadFromStart();
+        filters.AddChild(verifiedOnly);
+
+        notableOnly = new CheckButton
+        {
+            Text = "Notable only",
+            CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 58 : 40),
+        };
+        notableOnly.Toggled += _ => ReloadFromStart();
+        filters.AddChild(notableOnly);
+
+        statusLabel = new Label { Text = "Search the online map library." };
         layout.AddChild(statusLabel);
 
-        ScrollContainer scroll = new()
+        resultsScroll = new ScrollContainer
         {
             SizeFlagsVertical = SizeFlags.ExpandFill,
             HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled,
         };
-        layout.AddChild(scroll);
-        scroll.GetVScrollBar().CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 46 : 24, 0);
+        resultsScroll.GetVScrollBar().CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 38 : 20, 0);
+        layout.AddChild(resultsScroll);
 
-        results = new VBoxContainer();
-        results.AddThemeConstantOverride("separation", 6);
-        results.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-        scroll.AddChild(results);
-    }
+        results = new GridContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
+        results.AddThemeConstantOverride("h_separation", MobileUi.IsMobile ? 10 : 12);
+        results.AddThemeConstantOverride("v_separation", MobileUi.IsMobile ? 10 : 12);
+        resultsScroll.AddChild(results);
 
-    private static void AddFilter(Container parent, string labelText, string[] options, out OptionButton option)
-    {
-        Label label = new() { Text = labelText, VerticalAlignment = VerticalAlignment.Center };
-        parent.AddChild(label);
-
-        option = new OptionButton { CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 180 : 140, MobileUi.IsMobile ? 60 : 42) };
-        foreach (string item in options)
+        HBoxContainer pagination = new()
         {
-            option.AddItem(item);
-        }
-        parent.AddChild(option);
+            Alignment = BoxContainer.AlignmentMode.Center,
+            CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 58 : 42),
+        };
+        layout.AddChild(pagination);
+
+        previousButton = new Button { Text = "Previous", CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 124 : 102, MobileUi.IsMobile ? 54 : 38) };
+        previousButton.Pressed += () =>
+        {
+            offset = Math.Max(0, offset - pageSize);
+            LoadMaps();
+        };
+        pagination.AddChild(previousButton);
+
+        pageLabel = new Label
+        {
+            Text = "0 maps",
+            HorizontalAlignment = HorizontalAlignment.Center,
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 210 : 190, 0),
+        };
+        pagination.AddChild(pageLabel);
+
+        nextButton = new Button { Text = "Next", CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 100 : 82, MobileUi.IsMobile ? 54 : 38) };
+        nextButton.Pressed += () =>
+        {
+            offset += pageSize;
+            LoadMaps();
+        };
+        pagination.AddChild(nextButton);
+
+        searchTimer = new Timer { OneShot = true, WaitTime = 0.35 };
+        searchTimer.Timeout += LoadMaps;
+        AddChild(searchTimer);
     }
 
-    private void LoadMaps()
+    private void UpdateColumnCount()
     {
-        if (isLoading)
+        if (results == null)
         {
             return;
         }
 
+        results.Columns = Size.X < 800 ? 1 : Size.X < 1420 ? 2 : 3;
+    }
+
+    private void ReloadFromStart()
+    {
+        offset = 0;
+        LoadMaps();
+    }
+
+    private void LoadMaps()
+    {
+        if (!IsInsideTree())
+        {
+            return;
+        }
+
+        int generation = ++requestGeneration;
+        if (catalogRequest != null && IsInstanceValid(catalogRequest))
+        {
+            catalogRequest.CancelRequest();
+            catalogRequest.QueueFree();
+            catalogRequest = null;
+        }
+
         isLoading = true;
         reloadButton.Disabled = true;
+        previousButton.Disabled = true;
+        nextButton.Disabled = true;
         statusLabel.Text = "Loading maps...";
 
-        HttpRequest request = new() { Timeout = 30 };
+        List<string> query = [$"limit={pageSize}", $"offset={offset}"];
+        string searchText = search.Text.Trim();
+        int selectedDifficulty = difficultyFilter.GetSelectedId();
+        int searchedDifficulty = Array.FindIndex(
+            Constants.DIFFICULTIES,
+            difficulty => string.Equals(difficulty, searchText, StringComparison.OrdinalIgnoreCase)
+        );
+        if (selectedDifficulty >= 0)
+        {
+            query.Add($"difficulty={selectedDifficulty}");
+        }
+        else if (searchedDifficulty >= 0)
+        {
+            query.Add($"difficulty={searchedDifficulty}");
+        }
+        else if (searchText.Length > 0)
+        {
+            query.Add($"query={Uri.EscapeDataString(searchText)}");
+        }
+
+        if (verifiedOnly.ButtonPressed)
+        {
+            query.Add("verified=true");
+        }
+        if (notableOnly.ButtonPressed)
+        {
+            query.Add("notable=true");
+        }
+
+        query.Add($"sortDirection={(sortDirection.GetSelectedId() == 1 ? "asc" : "desc")}");
+
+        HttpRequest request = new() { Timeout = 45 };
+        catalogRequest = request;
         AddChild(request);
         request.RequestCompleted += (result, responseCode, _, body) =>
         {
+            request.QueueFree();
+            if (generation != requestGeneration)
+            {
+                return;
+            }
+
+            catalogRequest = null;
             isLoading = false;
             reloadButton.Disabled = false;
-            request.QueueFree();
 
             if (result != (long)HttpRequest.Result.Success || responseCode is < 200 or >= 300)
             {
                 statusLabel.Text = $"Could not load maps (HTTP {responseCode}, request result {result}).";
                 GD.PushWarning(statusLabel.Text);
+                UpdatePageButtons();
                 return;
             }
 
             try
             {
                 using JsonDocument document = JsonDocument.Parse(body);
-                if (!document.RootElement.TryGetProperty("maps", out JsonElement mapArray) || mapArray.ValueKind != JsonValueKind.Array)
+                JsonElement root = document.RootElement;
+                if (
+                    root.ValueKind != JsonValueKind.Object
+                    || !root.TryGetProperty("maps", out JsonElement mapArray)
+                    || mapArray.ValueKind != JsonValueKind.Array
+                )
                 {
                     throw new JsonException("API response does not contain a maps array.");
                 }
@@ -228,6 +381,11 @@ public partial class OnlineMapBrowser : Control
                 maps.Clear();
                 foreach (JsonElement item in mapArray.EnumerateArray())
                 {
+                    if (item.ValueKind != JsonValueKind.Object)
+                    {
+                        continue;
+                    }
+
                     OnlineMap map = ParseMap(item);
                     if (map.Id.Length > 0 && map.Title.Length > 0 && map.FileUrl.Length > 0)
                     {
@@ -235,23 +393,31 @@ public partial class OnlineMapBrowser : Control
                     }
                 }
 
+                totalMaps = ReadInteger(root, "total");
+                offset = ReadInteger(root, "offset");
                 UpdateResults();
             }
             catch (JsonException exception)
             {
                 statusLabel.Text = "The map service returned invalid data.";
                 GD.PushError($"Could not parse online maps: {exception.Message}");
+                UpdatePageButtons();
             }
         };
 
-        Error error = request.Request(ApiUrl, ["Accept: application/json"]);
+        Error error = request.Request(ApiUrl + "?" + string.Join("&", query), ["Accept: application/json"]);
         if (error != Error.Ok)
         {
-            isLoading = false;
-            reloadButton.Disabled = false;
             request.QueueFree();
-            statusLabel.Text = $"Could not connect to the map service ({error}).";
-            GD.PushWarning(statusLabel.Text);
+            if (generation == requestGeneration)
+            {
+                catalogRequest = null;
+                isLoading = false;
+                reloadButton.Disabled = false;
+                statusLabel.Text = $"Could not connect to the map service ({error}).";
+                GD.PushWarning(statusLabel.Text);
+                UpdatePageButtons();
+            }
         }
     }
 
@@ -263,181 +429,293 @@ public partial class OnlineMapBrowser : Control
         {
             foreach (JsonElement mapper in mapperArray.EnumerateArray())
             {
+                if (mapper.ValueKind != JsonValueKind.Object)
+                {
+                    continue;
+                }
+
                 string name = ReadString(mapper, "name");
                 if (name.Length > 0)
                 {
                     mappers.Add(name);
                 }
-
                 hasNotableMapper |= ReadBoolean(mapper, "isNotable");
             }
         }
 
-        DateTimeOffset.TryParse(
-            ReadString(item, "createdAt"),
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.AssumeUniversal,
-            out DateTimeOffset createdAt
-        );
+        string coverUrl = "";
+        if (item.TryGetProperty("covers", out JsonElement covers) && covers.ValueKind == JsonValueKind.Object)
+        {
+            coverUrl = ReadString(covers, MobileUi.IsMobile ? "128" : "256");
+            if (coverUrl.Length == 0)
+            {
+                coverUrl = ReadString(covers, "128");
+            }
+        }
 
         return new OnlineMap
         {
             Id = ReadString(item, "id"),
             Title = ReadString(item, "title"),
             Artist = ReadString(item, "artist"),
+            DifficultyName = ReadString(item, "difficultyName"),
             Status = ReadString(item, "status"),
             FileUrl = ReadString(item, "fileUrl"),
+            CoverUrl = coverUrl,
             Mappers = [.. mappers],
             IsVerified = ReadBoolean(item, "isVerified"),
             HasNotableMapper = hasNotableMapper,
             Difficulty = ReadInteger(item, "difficulty"),
             Length = ReadInteger(item, "length"),
-            CreatedAt = createdAt,
+            NoteCount = ReadInteger(item, "noteCount"),
         };
     }
 
     private static string ReadString(JsonElement element, string property)
     {
-        return element.TryGetProperty(property, out JsonElement value) && value.ValueKind == JsonValueKind.String
+        return element.ValueKind == JsonValueKind.Object
+            && element.TryGetProperty(property, out JsonElement value)
+            && value.ValueKind == JsonValueKind.String
             ? value.GetString() ?? ""
             : "";
     }
 
     private static bool ReadBoolean(JsonElement element, string property)
     {
-        return element.TryGetProperty(property, out JsonElement value) && value.ValueKind == JsonValueKind.True;
+        return element.ValueKind == JsonValueKind.Object
+            && element.TryGetProperty(property, out JsonElement value)
+            && value.ValueKind == JsonValueKind.True;
     }
 
     private static int ReadInteger(JsonElement element, string property)
     {
-        return element.TryGetProperty(property, out JsonElement value) && value.TryGetInt32(out int result) ? result : 0;
+        return element.ValueKind == JsonValueKind.Object
+            && element.TryGetProperty(property, out JsonElement value)
+            && value.TryGetInt32(out int result)
+            ? result
+            : 0;
     }
 
     private void UpdateResults()
     {
-        if (results == null)
-        {
-            return;
-        }
-
+        renderGeneration++;
         foreach (Node child in results.GetChildren())
         {
             child.QueueFree();
         }
 
-        IEnumerable<OnlineMap> filtered = maps.Where(map =>
-            map.Title.Contains(mapSearch.Text, StringComparison.OrdinalIgnoreCase)
-            || map.Artist.Contains(mapSearch.Text, StringComparison.OrdinalIgnoreCase)
-        );
-        if (mapperSearch.Text.Length > 0)
+        foreach (OnlineMap map in maps)
         {
-            filtered = filtered.Where(map =>
-                map.Mappers.Any(mapper => mapper.Contains(mapperSearch.Text, StringComparison.OrdinalIgnoreCase))
-            );
+            AddMapCard(map, renderGeneration);
         }
 
-        if (notableFilter.Selected == 1)
-        {
-            filtered = filtered.Where(map => map.HasNotableMapper);
-        }
-        else if (notableFilter.Selected == 2)
-        {
-            filtered = filtered.Where(map => !map.HasNotableMapper);
-        }
-
-        if (verifiedFilter.Selected == 1)
-        {
-            filtered = filtered.Where(map => map.IsVerified);
-        }
-        else if (verifiedFilter.Selected == 2)
-        {
-            filtered = filtered.Where(map => !map.IsVerified);
-        }
-
-        filtered = sortOrder.Selected switch
-        {
-            1 => filtered.OrderBy(map => map.Title, StringComparer.OrdinalIgnoreCase),
-            2 => filtered.OrderByDescending(map => map.Title, StringComparer.OrdinalIgnoreCase),
-            3 => filtered.OrderByDescending(map => map.Difficulty).ThenBy(map => map.Title, StringComparer.OrdinalIgnoreCase),
-            _ => filtered.OrderByDescending(map => map.CreatedAt),
-        };
-
-        OnlineMap[] visibleMaps = [.. filtered];
-        statusLabel.Text = $"{visibleMaps.Length} map(s) shown from {maps.Count} available.";
-        if (visibleMaps.Length == 0)
-        {
-            results.AddChild(new Label { Text = maps.Count == 0 ? "No maps are available." : "No maps match those filters." });
-            return;
-        }
-
-        foreach (OnlineMap map in visibleMaps)
-        {
-            AddMapRow(map);
-        }
+        int first = maps.Count == 0 ? 0 : offset + 1;
+        int last = offset + maps.Count;
+        pageLabel.Text = maps.Count == 0 ? $"0 of {totalMaps}" : $"{first}-{last} of {totalMaps}";
+        statusLabel.Text = isLoading
+            ? "Loading maps..."
+            : totalMaps == 0
+                ? "No maps match those filters."
+                : $"Showing {first}-{last} of {totalMaps} maps.";
+        previousButton.Disabled = isLoading || offset == 0;
+        nextButton.Disabled = isLoading || offset + maps.Count >= totalMaps;
+        reloadButton.Disabled = isLoading;
+        resultsScroll.ScrollVertical = 0;
     }
 
-    private void AddMapRow(OnlineMap map)
+    private void AddMapCard(OnlineMap map, int generation)
     {
-        PanelContainer row = new();
-        StyleBoxFlat rowStyle = new()
+        PanelContainer card = new()
         {
-            BgColor = new Color("141f2a"),
-            BorderColor = new Color("344e59"),
-            BorderWidthLeft = 1, BorderWidthTop = 1, BorderWidthRight = 1, BorderWidthBottom = 1,
-            CornerRadiusTopLeft = 10, CornerRadiusTopRight = 10,
-            CornerRadiusBottomLeft = 10, CornerRadiusBottomRight = 10,
-            ContentMarginLeft = 12,
-            ContentMarginTop = 9,
-            ContentMarginRight = 12,
-            ContentMarginBottom = 9,
+            CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 148 : 132),
+            SizeFlagsHorizontal = SizeFlags.ExpandFill,
         };
-        row.AddThemeStyleboxOverride("panel", rowStyle);
-        results.AddChild(row);
+        StyleBoxFlat cardStyle = new()
+        {
+            BgColor = new Color("283138"),
+            CornerRadiusTopLeft = 8,
+            CornerRadiusTopRight = 8,
+            CornerRadiusBottomLeft = 8,
+            CornerRadiusBottomRight = 8,
+            ContentMarginLeft = 0,
+            ContentMarginTop = 0,
+            ContentMarginRight = 0,
+            ContentMarginBottom = 0,
+        };
+        card.AddThemeStyleboxOverride("panel", cardStyle);
+        results.AddChild(card);
 
-        HBoxContainer rowLayout = new();
-        rowLayout.AddThemeConstantOverride("separation", 10);
-        row.AddChild(rowLayout);
+        HBoxContainer cardLayout = new();
+        cardLayout.AddThemeConstantOverride("separation", 0);
+        card.AddChild(cardLayout);
 
-        VBoxContainer description = new() { SizeFlagsHorizontal = SizeFlags.ExpandFill };
-        description.AddThemeConstantOverride("separation", 2);
-        rowLayout.AddChild(description);
+        TextureRect cover = new()
+        {
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 132 : 116, 0),
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.KeepAspectCovered,
+            Texture = GD.Load<Texture2D>("res://textures/empty.png"),
+            MouseFilter = Control.MouseFilterEnum.Ignore,
+        };
+        cardLayout.AddChild(cover);
+        LoadCover(map, cover, generation);
+
+        MarginContainer detailsMargin = new();
+        detailsMargin.AddThemeConstantOverride("margin_left", 10);
+        detailsMargin.AddThemeConstantOverride("margin_right", 8);
+        detailsMargin.AddThemeConstantOverride("margin_top", 6);
+        detailsMargin.AddThemeConstantOverride("margin_bottom", 6);
+        detailsMargin.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        detailsMargin.SizeFlagsVertical = SizeFlags.ExpandFill;
+        cardLayout.AddChild(detailsMargin);
+
+        VBoxContainer details = new()
+        {
+            SizeFlagsHorizontal = SizeFlags.ExpandFill,
+            SizeFlagsVertical = SizeFlags.ExpandFill,
+        };
+        details.AddThemeConstantOverride("separation", 2);
+        detailsMargin.AddChild(details);
 
         Label title = new()
         {
             Text = string.IsNullOrWhiteSpace(map.Artist) ? map.Title : $"{map.Artist} - {map.Title}",
             ClipText = true,
+            TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis,
         };
-        title.AddThemeFontSizeOverride("font_size", MobileUi.IsMobile ? 24 : 19);
-        description.AddChild(title);
+        title.AddThemeFontSizeOverride("font_size", MobileUi.IsMobile ? 22 : 18);
+        details.AddChild(title);
 
-        string mappers = map.Mappers.Length == 0 ? "Unknown mapper" : string.Join(", ", map.Mappers);
-        string flags = $"{(map.HasNotableMapper ? "Notable mapper" : "Non-notable mapper")} | {(map.IsVerified ? "Verified" : "Unverified")} | {map.Status}";
-        string duration = TimeSpan.FromMilliseconds(Math.Max(0, map.Length)).ToString(@"m\:ss", CultureInfo.InvariantCulture);
-        description.AddChild(new Label
+        string mapperNames = map.Mappers.Length == 0 ? "Unknown mapper" : string.Join(", ", map.Mappers);
+        Label mapper = new() { Text = $"by {mapperNames}", ClipText = true };
+        mapper.AddThemeColorOverride(
+            "font_color",
+            map.HasNotableMapper ? new Color("ff626b") : new Color("dedede")
+        );
+        details.AddChild(mapper);
+
+        string difficulty = string.IsNullOrWhiteSpace(map.DifficultyName)
+            ? Constants.DIFFICULTIES[Math.Clamp(map.Difficulty, 0, Constants.DIFFICULTIES.Length - 1)]
+            : map.DifficultyName;
+        Label difficultyLabel = new() { Text = difficulty, ClipText = true };
+        difficultyLabel.AddThemeColorOverride(
+            "font_color",
+            Constants.DIFFICULTY_COLORS[Math.Clamp(map.Difficulty, 0, Constants.DIFFICULTY_COLORS.Length - 1)]
+        );
+        details.AddChild(difficultyLabel);
+
+        HBoxContainer metadata = new();
+        metadata.AddThemeConstantOverride("separation", 8);
+        details.AddChild(metadata);
+        Label notable = new() { Text = map.HasNotableMapper ? "NOTABLE" : "NON-NOTABLE" };
+        notable.AddThemeColorOverride(
+            "font_color",
+            map.HasNotableMapper ? new Color("00b9ff") : new Color("b0b0b0")
+        );
+        metadata.AddChild(notable);
+
+        Label verified = new() { Text = map.IsVerified ? "VERIFIED" : "UNVERIFIED" };
+        verified.AddThemeColorOverride(
+            "font_color",
+            map.IsVerified ? new Color("71e58b") : new Color("b0b0b0")
+        );
+        metadata.AddChild(verified);
+
+        Label noteCount = new()
         {
-            Text = $"{mappers} | {flags} | Difficulty {map.Difficulty} | {duration}",
-            AutowrapMode = TextServer.AutowrapMode.WordSmart,
-        });
+            Text = $"{map.NoteCount} notes",
+            SizeFlagsHorizontal = SizeFlags.ExpandFill,
+        };
+        metadata.AddChild(noteCount);
+        metadata.AddChild(
+            new Label
+            {
+                Text = FormatDuration(map.Length),
+                HorizontalAlignment = HorizontalAlignment.Right,
+            }
+        );
 
         Button downloadButton = new()
         {
-            Text = "Download",
+            Text = MobileUi.IsMobile ? "Get" : "Download",
+            TooltipText = "Download map",
             Icon = TyanitiaIcons.Get("import"),
-            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 160 : 128, MobileUi.IsMobile ? 66 : 50),
-            SizeFlagsVertical = SizeFlags.ShrinkCenter,
+            CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 84 : 122, 0),
+            SizeFlagsVertical = SizeFlags.ExpandFill,
         };
-        downloadButton.AddThemeConstantOverride("icon_max_width", 25);
         downloadButton.Pressed += () => DownloadMap(map, downloadButton);
-        rowLayout.AddChild(downloadButton);
+        cardLayout.AddChild(downloadButton);
+    }
+
+    private void LoadCover(OnlineMap map, TextureRect cover, int generation)
+    {
+        if (map.CoverUrl.Length == 0 || !TryGetApiUrl(map.CoverUrl, out string coverUrl))
+        {
+            return;
+        }
+
+        HttpRequest request = new() { Timeout = 30 };
+        AddChild(request);
+        request.RequestCompleted += (result, responseCode, _, body) =>
+        {
+            request.QueueFree();
+            if (
+                generation != renderGeneration
+                || !IsInstanceValid(cover)
+                || !cover.IsInsideTree()
+                || result != (long)HttpRequest.Result.Success
+                || responseCode is < 200 or >= 300
+            )
+            {
+                return;
+            }
+
+            Image image = Util.Misc.LoadImageFromBuffer(body);
+            if (image != null)
+            {
+                cover.Texture = ImageTexture.CreateFromImage(image);
+            }
+        };
+
+        Error error = request.Request(coverUrl);
+        if (error != Error.Ok)
+        {
+            request.QueueFree();
+            GD.PushWarning($"Could not request cover art for {map.Id}: {error}");
+        }
+    }
+
+    private static string FormatDuration(int milliseconds)
+    {
+        TimeSpan duration = TimeSpan.FromMilliseconds(Math.Max(0, milliseconds));
+        return $"{(int)duration.TotalMinutes:00}:{duration.Seconds:00}";
+    }
+
+    private void UpdatePageButtons()
+    {
+        previousButton.Disabled = offset == 0;
+        nextButton.Disabled = offset + maps.Count >= totalMaps;
+    }
+
+    private static bool TryGetApiUrl(string path, out string url)
+    {
+        url = "";
+        if (
+            !Uri.TryCreate(new Uri(ApiUrl), path, out Uri uri)
+            || uri.Scheme != Uri.UriSchemeHttps
+            || !string.Equals(uri.Host, ApiHost, StringComparison.OrdinalIgnoreCase)
+        )
+        {
+            return false;
+        }
+
+        url = uri.ToString();
+        return true;
     }
 
     private void DownloadMap(OnlineMap map, Button button)
     {
-        if (
-            !Uri.TryCreate(new Uri(ApiUrl), map.FileUrl, out Uri fileUri)
-            || fileUri.Scheme != Uri.UriSchemeHttps
-            || !string.Equals(fileUri.Host, "rhythia-api.nyarw.moe", StringComparison.OrdinalIgnoreCase)
-        )
+        if (!TryGetApiUrl(map.FileUrl, out string fileUrl))
         {
             GD.PushWarning($"Rejected invalid map download URL for {map.Id}.");
             button.Text = "Invalid URL";
@@ -506,7 +784,7 @@ public partial class OnlineMapBrowser : Control
             }
         };
 
-        Error error = request.Request(fileUri.ToString());
+        Error error = request.Request(fileUrl);
         if (error != Error.Ok)
         {
             request.QueueFree();
