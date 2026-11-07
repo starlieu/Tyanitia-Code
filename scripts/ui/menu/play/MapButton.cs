@@ -167,11 +167,7 @@ public partial class MapButton : Control, ISkinnable
 
         if (IsInstanceValid(Favorited) && Favorited.IsInsideTree())
         {
-<<<<<<< HEAD
             Favorited.Texture = TyanitiaIcons.Get("bookmark_filled");
-=======
-            Favorited.Texture = skin.FavoriteImage;
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
     }
 

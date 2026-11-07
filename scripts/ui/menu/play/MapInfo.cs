@@ -42,14 +42,11 @@ public partial class MapInfo : AspectRatioContainer
 
     public override void _Draw()
     {
-<<<<<<< HEAD
         if (GetParent() is ScrollContainer)
         {
             holder.CustomMinimumSize = new Vector2(Mathf.Max(260, Size.X - (MobileUi.IsMobile ? 52 : 28)), MobileUi.IsMobile ? 940 : 830);
             return;
         }
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         float height = (AnchorBottom - AnchorTop) * GetParent<Control>().Size.Y - OffsetTop + OffsetBottom;
 
         holder.CustomMinimumSize = Vector2.One * Math.Min(850, height);

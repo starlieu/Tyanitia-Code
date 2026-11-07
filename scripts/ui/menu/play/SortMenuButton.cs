@@ -50,11 +50,7 @@ public partial class SortMenuButton : Button, ISkinnable
 
     public void UpdateSkin(SkinProfile skin)
     {
-<<<<<<< HEAD
         order.Icon = TyanitiaIcons.Get(MapList.Instance.Ascending.Value ? "sort_ascend" : "sort");
-=======
-        order.Icon = MapList.Instance.Ascending.Value ? skin.SortAscendButtonImage : skin.SortButtonImage;
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         Icon = order.Icon;
     }
 
@@ -77,17 +73,9 @@ public partial class SortMenuButton : Button, ISkinnable
 
     private void toggleOrder()
     {
-<<<<<<< HEAD
         MapList.Instance.Ascending.Value = !MapList.Instance.Ascending.Value;
         orderLabel.Text = MapList.Instance.Ascending.Value ? "Ascending" : "Descending";
         order.Icon = TyanitiaIcons.Get(MapList.Instance.Ascending.Value ? "sort_ascend" : "sort");
-=======
-        var skin = SkinManager.Instance.Skin;
-
-        MapList.Instance.Ascending.Value = !MapList.Instance.Ascending.Value;
-        orderLabel.Text = MapList.Instance.Ascending.Value ? "Ascending" : "Descending";
-        order.Icon = MapList.Instance.Ascending.Value ? skin.SortAscendButtonImage : skin.SortButtonImage;
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
         Icon = order.Icon;
     }

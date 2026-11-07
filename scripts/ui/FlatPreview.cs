@@ -10,13 +10,8 @@ public partial class FlatPreview : Panel
     public double Time = 0;
     public double Speed = 1;
 
-<<<<<<< HEAD
     private Color bright = new(0.35f, 0.95f, 0.88f, 0.58f);
     private Color transparent = new(0.35f, 0.95f, 0.88f, 0);
-=======
-    private Color bright = new(1, 1, 1, 0.2f);
-    private Color transparent = new(1, 1, 1, 0);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     private ColorRect[] tiles = new ColorRect[9];
     private int lastPassedNote = 0;
     private double[] noteTimestamps;
@@ -25,11 +20,7 @@ public partial class FlatPreview : Panel
     {
         for (int i = 0; i < 9; i++)
         {
-<<<<<<< HEAD
             ColorRect tile = new() { Name = i.ToString(CultureInfo.CurrentCulture), Color = transparent, MouseFilter = MouseFilterEnum.Ignore };
-=======
-            ColorRect tile = new() { Name = i.ToString(CultureInfo.CurrentCulture), Color = transparent };
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
             AddChild(tile);
 
@@ -46,7 +37,6 @@ public partial class FlatPreview : Panel
         }
     }
 
-<<<<<<< HEAD
     public override void _Draw()
     {
         var background = new Color("0b1421");
@@ -60,8 +50,6 @@ public partial class FlatPreview : Panel
         DrawRect(new Rect2(Vector2.Zero, Size), new Color(0.54f, 0.9f, 0.85f, 0.5f), false, 2);
     }
 
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     public override void _Process(double delta)
     {
         if (Map == null)

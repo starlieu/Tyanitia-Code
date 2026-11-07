@@ -32,10 +32,7 @@ public partial class Attempt : RefCounted
     public double Health = 100;
     public double HealthStep = 15;
     public bool HasHealthModifier = false;
-<<<<<<< HEAD
     public bool HardRock = false;
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
     public uint Hits = 0;
     public uint Misses = 0;
@@ -91,10 +88,7 @@ public partial class Attempt : RefCounted
         CameraMode = cameraMode;
         Modifiers = mods;
         HasHealthModifier = Modifiers.Any(mod => mod is IHealthModifier);
-<<<<<<< HEAD
         HardRock = Modifiers.Any(mod => mod is HardRockModifier);
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         Objects[typeof(Note)] = [.. map.Notes];
         HitsInfo = IsReplay ? Replays[0].Notes : new float[Map.Notes.Length];
 

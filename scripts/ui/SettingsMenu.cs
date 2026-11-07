@@ -56,7 +56,6 @@ public partial class SettingsMenu : ColorRect
             holder.OffsetBottom = 0;
         }
 
-<<<<<<< HEAD
         // Keep controls on the left and reserve the right side for a live map preview.
         holder.AnchorLeft = 0.035f;
         holder.AnchorTop = 0.055f;
@@ -78,8 +77,6 @@ public partial class SettingsMenu : ColorRect
         preview.OffsetRight = 0;
         preview.OffsetBottom = 0;
 
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         Modulate = Color.Color8(255, 255, 255, 0);
 
         LineEdit profileEdit = header.GetNode<LineEdit>("ProfileEdit");
@@ -185,11 +182,7 @@ public partial class SettingsMenu : ColorRect
                 panel.Name = setting.Id;
                 panel.Visible = true;
                 if (MobileUi.IsMobile)
-<<<<<<< HEAD
                     panel.CustomMinimumSize = new Vector2(0, 136);
-=======
-                    panel.CustomMinimumSize = new Vector2(0, 112);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
                 Label title = panel.GetNode<Label>("Title");
                 title.Text = setting.Title;
@@ -301,87 +294,51 @@ public partial class SettingsMenu : ColorRect
         title.OffsetTop = 0;
         title.OffsetRight = 0;
         title.OffsetBottom = 0;
-<<<<<<< HEAD
         title.AddThemeFontSizeOverride("font_size", 28);
-=======
-        title.AddThemeFontSizeOverride("font_size", 24);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         title.AutowrapMode = TextServer.AutowrapMode.WordSmart;
 
         if (panel.GetNodeOrNull<HSlider>("Slider") is HSlider slider)
         {
             setMobileControlRect(slider, 0.04f, 0.48f, 0.76f, 1.0f);
-<<<<<<< HEAD
             slider.CustomMinimumSize = new Vector2(0, 76);
-=======
-            slider.CustomMinimumSize = new Vector2(0, 64);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
 
         if (panel.GetNodeOrNull<LineEdit>("SliderLineEdit") is LineEdit sliderValue)
         {
             setMobileControlRect(sliderValue, 0.78f, 0.48f, 0.96f, 1.0f);
-<<<<<<< HEAD
             sliderValue.CustomMinimumSize = new Vector2(0, 76);
             sliderValue.AddThemeFontSizeOverride("font_size", 28);
-=======
-            sliderValue.CustomMinimumSize = new Vector2(0, 64);
-            sliderValue.AddThemeFontSizeOverride("font_size", 24);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
 
         if (panel.GetNodeOrNull<LineEdit>("LineEdit") is LineEdit input)
         {
             setMobileControlRect(input, 0.04f, 0.48f, 0.96f, 1.0f);
-<<<<<<< HEAD
             input.CustomMinimumSize = new Vector2(0, 76);
             input.AddThemeFontSizeOverride("font_size", 28);
-=======
-            input.CustomMinimumSize = new Vector2(0, 64);
-            input.AddThemeFontSizeOverride("font_size", 24);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
 
         if (panel.GetNodeOrNull<CheckButton>("CheckButton") is CheckButton check)
         {
             setMobileControlRect(check, 0.04f, 0.48f, 0.96f, 1.0f);
-<<<<<<< HEAD
             check.CustomMinimumSize = new Vector2(0, 76);
             check.AddThemeFontSizeOverride("font_size", 28);
-=======
-            check.CustomMinimumSize = new Vector2(0, 64);
-            check.AddThemeFontSizeOverride("font_size", 24);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
 
         if (panel.GetNodeOrNull<OptionButton>("OptionButton") is OptionButton option)
         {
             setMobileControlRect(option, 0.04f, 0.48f, 0.96f, 1.0f);
-<<<<<<< HEAD
             option.CustomMinimumSize = new Vector2(0, 76);
             option.AddThemeFontSizeOverride("font_size", 28);
-=======
-            option.CustomMinimumSize = new Vector2(0, 64);
-            option.AddThemeFontSizeOverride("font_size", 24);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
 
         if (panel.GetNodeOrNull<HBoxContainer>("ButtonHBoxContainer") is HBoxContainer buttons)
         {
             setMobileControlRect(buttons, 0.04f, 0.48f, 0.96f, 1.0f);
-<<<<<<< HEAD
             buttons.CustomMinimumSize = new Vector2(0, 76);
             foreach (Button button in buttons.GetChildren().OfType<Button>())
             {
                 button.CustomMinimumSize = new Vector2(0, 76);
                 button.AddThemeFontSizeOverride("font_size", 28);
-=======
-            buttons.CustomMinimumSize = new Vector2(0, 64);
-            foreach (Button button in buttons.GetChildren().OfType<Button>())
-            {
-                button.CustomMinimumSize = new Vector2(0, 64);
-                button.AddThemeFontSizeOverride("font_size", 24);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
             }
         }
     }
@@ -402,7 +359,6 @@ public partial class SettingsMenu : ColorRect
     {
         foreach (ColorRect category in sidebar.GetChildren().OfType<ColorRect>())
         {
-<<<<<<< HEAD
             category.CustomMinimumSize = new Vector2(0, 92);
             Button button = category.GetNode<Button>("Button");
             button.CustomMinimumSize = new Vector2(0, 92);
@@ -415,20 +371,6 @@ public partial class SettingsMenu : ColorRect
         holder.GetNode<ScrollContainer>("Sidebar").GetVScrollBar().CustomMinimumSize = new Vector2(48, 0);
         hideButton.CustomMinimumSize = new Vector2(110, 88);
         hideButton.AddThemeFontSizeOverride("font_size", 28);
-=======
-            category.CustomMinimumSize = new Vector2(0, 76);
-            Button button = category.GetNode<Button>("Button");
-            button.CustomMinimumSize = new Vector2(0, 76);
-            button.AddThemeFontSizeOverride("font_size", 22);
-        }
-
-        foreach (ScrollContainer scroll in categories.GetChildren().OfType<ScrollContainer>())
-            scroll.GetVScrollBar().CustomMinimumSize = new Vector2(36, 0);
-
-        holder.GetNode<ScrollContainer>("Sidebar").GetVScrollBar().CustomMinimumSize = new Vector2(36, 0);
-        hideButton.CustomMinimumSize = new Vector2(96, 76);
-        hideButton.AddThemeFontSizeOverride("font_size", 24);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     }
 
     public void ShowMenu(bool show = true)

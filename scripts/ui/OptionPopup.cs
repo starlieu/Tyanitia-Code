@@ -53,7 +53,6 @@ public partial class OptionPopup : Control
 
         GetNode<Button>("Hide").Pressed += Hide;
 
-<<<<<<< HEAD
         if (MobileUi.IsMobile)
         {
             GetNode<PanelContainer>("Holder").CustomMinimumSize = new Vector2(560, 0);
@@ -63,8 +62,6 @@ public partial class OptionPopup : Control
             buttonTemplate.AddThemeFontSizeOverride("font_size", 27);
         }
 
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         Visible = false;
         Modulate = Color.Color8(255, 255, 255, 0);
     }

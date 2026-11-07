@@ -72,7 +72,6 @@ public partial class OnlineMapBrowser : Control
             Color = new Color(0, 0, 0, 0.78f),
             MouseFilter = MouseFilterEnum.Stop,
         };
-<<<<<<< HEAD
         AddChild(backdrop);
         backdrop.AnchorRight = 1;
         backdrop.AnchorBottom = 1;
@@ -83,22 +82,10 @@ public partial class OnlineMapBrowser : Control
             AnchorTop = MobileUi.IsMobile ? 0.02f : 0.06f,
             AnchorRight = MobileUi.IsMobile ? 0.98f : 0.94f,
             AnchorBottom = MobileUi.IsMobile ? 0.98f : 0.94f,
-=======
-        backdrop.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-        AddChild(backdrop);
-
-        PanelContainer dialog = new()
-        {
-            AnchorLeft = 0.04f,
-            AnchorTop = 0.04f,
-            AnchorRight = 0.96f,
-            AnchorBottom = 0.96f,
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
             MouseFilter = MouseFilterEnum.Stop,
         };
         StyleBoxFlat panelStyle = new()
         {
-<<<<<<< HEAD
             BgColor = new Color("0a111b"),
             BorderColor = new Color("328c8f"),
             BorderWidthLeft = 1, BorderWidthTop = 1, BorderWidthRight = 1, BorderWidthBottom = 1,
@@ -110,27 +97,12 @@ public partial class OnlineMapBrowser : Control
             ContentMarginTop = MobileUi.IsMobile ? 18 : 14,
             ContentMarginRight = MobileUi.IsMobile ? 22 : 18,
             ContentMarginBottom = MobileUi.IsMobile ? 18 : 14,
-=======
-            BgColor = new Color(0.055f, 0.055f, 0.07f, 0.98f),
-            CornerRadiusTopLeft = 8,
-            CornerRadiusTopRight = 8,
-            CornerRadiusBottomLeft = 8,
-            CornerRadiusBottomRight = 8,
-            ContentMarginLeft = 16,
-            ContentMarginTop = 12,
-            ContentMarginRight = 16,
-            ContentMarginBottom = 12,
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         };
         dialog.AddThemeStyleboxOverride("panel", panelStyle);
         AddChild(dialog);
 
         VBoxContainer layout = new() { Theme = GD.Load<Theme>("res://themes/theme.tres") };
-<<<<<<< HEAD
         layout.AddThemeConstantOverride("separation", MobileUi.IsMobile ? 12 : 10);
-=======
-        layout.AddThemeConstantOverride("separation", 8);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         dialog.AddChild(layout);
 
         HBoxContainer header = new();
@@ -141,7 +113,6 @@ public partial class OnlineMapBrowser : Control
             SizeFlagsHorizontal = SizeFlags.ExpandFill,
             VerticalAlignment = VerticalAlignment.Center,
         };
-<<<<<<< HEAD
         title.AddThemeFontSizeOverride("font_size", MobileUi.IsMobile ? 30 : 26);
         header.AddChild(title);
 
@@ -152,16 +123,6 @@ public partial class OnlineMapBrowser : Control
 
         Button closeButton = new() { Text = "Close", Icon = TyanitiaIcons.Get("quit"), CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 140 : 100, MobileUi.IsMobile ? 64 : 44) };
         closeButton.AddThemeConstantOverride("icon_max_width", 25);
-=======
-        title.AddThemeFontSizeOverride("font_size", 24);
-        header.AddChild(title);
-
-        reloadButton = new Button { Text = "Refresh", CustomMinimumSize = new Vector2(90, 36) };
-        reloadButton.Pressed += LoadMaps;
-        header.AddChild(reloadButton);
-
-        Button closeButton = new() { Text = "Close", CustomMinimumSize = new Vector2(80, 36) };
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         closeButton.Pressed += () => Visible = false;
         header.AddChild(closeButton);
 
@@ -174,10 +135,7 @@ public partial class OnlineMapBrowser : Control
             PlaceholderText = "Search map title or artist",
             SizeFlagsHorizontal = SizeFlags.ExpandFill,
             ClearButtonEnabled = true,
-<<<<<<< HEAD
             CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 64 : 44),
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         };
         mapSearch.TextChanged += _ => UpdateResults();
         searches.AddChild(mapSearch);
@@ -187,19 +145,12 @@ public partial class OnlineMapBrowser : Control
             PlaceholderText = "Search mapper",
             SizeFlagsHorizontal = SizeFlags.ExpandFill,
             ClearButtonEnabled = true,
-<<<<<<< HEAD
             CustomMinimumSize = new Vector2(0, MobileUi.IsMobile ? 64 : 44),
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         };
         mapperSearch.TextChanged += _ => UpdateResults();
         searches.AddChild(mapperSearch);
 
-<<<<<<< HEAD
         HFlowContainer filters = new();
-=======
-        HBoxContainer filters = new();
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         filters.AddThemeConstantOverride("separation", 8);
         layout.AddChild(filters);
         AddFilter(filters, "Notable mapper", ["Any", "Notable", "Not notable"], out notableFilter);
@@ -219,10 +170,7 @@ public partial class OnlineMapBrowser : Control
             HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled,
         };
         layout.AddChild(scroll);
-<<<<<<< HEAD
         scroll.GetVScrollBar().CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 46 : 24, 0);
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
         results = new VBoxContainer();
         results.AddThemeConstantOverride("separation", 6);
@@ -230,20 +178,12 @@ public partial class OnlineMapBrowser : Control
         scroll.AddChild(results);
     }
 
-<<<<<<< HEAD
     private static void AddFilter(Container parent, string labelText, string[] options, out OptionButton option)
-=======
-    private static void AddFilter(HBoxContainer parent, string labelText, string[] options, out OptionButton option)
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     {
         Label label = new() { Text = labelText, VerticalAlignment = VerticalAlignment.Center };
         parent.AddChild(label);
 
-<<<<<<< HEAD
         option = new OptionButton { CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 180 : 140, MobileUi.IsMobile ? 60 : 42) };
-=======
-        option = new OptionButton { CustomMinimumSize = new Vector2(130, 36) };
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         foreach (string item in options)
         {
             option.AddItem(item);
@@ -262,11 +202,7 @@ public partial class OnlineMapBrowser : Control
         reloadButton.Disabled = true;
         statusLabel.Text = "Loading maps...";
 
-<<<<<<< HEAD
         HttpRequest request = new() { Timeout = 30 };
-=======
-        HTTPRequest request = new() { Timeout = 30 };
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         AddChild(request);
         request.RequestCompleted += (result, responseCode, _, body) =>
         {
@@ -274,11 +210,7 @@ public partial class OnlineMapBrowser : Control
             reloadButton.Disabled = false;
             request.QueueFree();
 
-<<<<<<< HEAD
             if (result != (long)HttpRequest.Result.Success || responseCode is < 200 or >= 300)
-=======
-            if (result != (long)HTTPRequest.Result.Success || responseCode is < 200 or >= 300)
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
             {
                 statusLabel.Text = $"Could not load maps (HTTP {responseCode}, request result {result}).";
                 GD.PushWarning(statusLabel.Text);
@@ -449,7 +381,6 @@ public partial class OnlineMapBrowser : Control
         PanelContainer row = new();
         StyleBoxFlat rowStyle = new()
         {
-<<<<<<< HEAD
             BgColor = new Color("141f2a"),
             BorderColor = new Color("344e59"),
             BorderWidthLeft = 1, BorderWidthTop = 1, BorderWidthRight = 1, BorderWidthBottom = 1,
@@ -459,13 +390,6 @@ public partial class OnlineMapBrowser : Control
             ContentMarginTop = 9,
             ContentMarginRight = 12,
             ContentMarginBottom = 9,
-=======
-            BgColor = new Color(0.12f, 0.12f, 0.15f, 0.95f),
-            ContentMarginLeft = 10,
-            ContentMarginTop = 6,
-            ContentMarginRight = 10,
-            ContentMarginBottom = 6,
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         };
         row.AddThemeStyleboxOverride("panel", rowStyle);
         results.AddChild(row);
@@ -483,11 +407,7 @@ public partial class OnlineMapBrowser : Control
             Text = string.IsNullOrWhiteSpace(map.Artist) ? map.Title : $"{map.Artist} - {map.Title}",
             ClipText = true,
         };
-<<<<<<< HEAD
         title.AddThemeFontSizeOverride("font_size", MobileUi.IsMobile ? 24 : 19);
-=======
-        title.AddThemeFontSizeOverride("font_size", 18);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         description.AddChild(title);
 
         string mappers = map.Mappers.Length == 0 ? "Unknown mapper" : string.Join(", ", map.Mappers);
@@ -502,17 +422,11 @@ public partial class OnlineMapBrowser : Control
         Button downloadButton = new()
         {
             Text = "Download",
-<<<<<<< HEAD
             Icon = TyanitiaIcons.Get("import"),
             CustomMinimumSize = new Vector2(MobileUi.IsMobile ? 160 : 128, MobileUi.IsMobile ? 66 : 50),
             SizeFlagsVertical = SizeFlags.ShrinkCenter,
         };
         downloadButton.AddThemeConstantOverride("icon_max_width", 25);
-=======
-            CustomMinimumSize = new Vector2(104, 40),
-            SizeFlagsVertical = SizeFlags.ShrinkCenter,
-        };
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         downloadButton.Pressed += () => DownloadMap(map, downloadButton);
         rowLayout.AddChild(downloadButton);
     }
@@ -535,20 +449,12 @@ public partial class OnlineMapBrowser : Control
         button.Text = "Downloading...";
         statusLabel.Text = $"Downloading {map.Title}...";
 
-<<<<<<< HEAD
         HttpRequest request = new() { Timeout = 60 };
-=======
-        HTTPRequest request = new() { Timeout = 60 };
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         AddChild(request);
         request.RequestCompleted += async (result, responseCode, _, body) =>
         {
             request.QueueFree();
-<<<<<<< HEAD
             if (result != (long)HttpRequest.Result.Success || responseCode is < 200 or >= 300)
-=======
-            if (result != (long)HTTPRequest.Result.Success || responseCode is < 200 or >= 300)
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
             {
                 button.Disabled = false;
                 button.Text = "Retry";

@@ -23,26 +23,13 @@ public partial class Loading : BaseScene
     [Export]
     private Panel progressBarFill;
 
-<<<<<<< HEAD
-=======
-    private ShaderMaterial splashMaterial;
-
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     public override async void _Ready()
     {
         base._Ready();
 
-<<<<<<< HEAD
         splash.Modulate = transparent;
         progressLabel.Hide();
         progressBar.Hide();
-=======
-        splashMaterial = splash.Material as ShaderMaterial;
-        splashMaterial.SetShaderParameter("shift", 0);
-
-        progressLabel.Modulate = transparent;
-        progressBar.Modulate = transparent;
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
         bool updateFound = false;
         try
@@ -86,30 +73,9 @@ public partial class Loading : BaseScene
 
     private Tween enter()
     {
-<<<<<<< HEAD
         var inTween = CreateTween().SetTrans(Tween.TransitionType.Sine).SetEase(Tween.EaseType.InOut).SetParallel();
         inTween.TweenProperty(background, "color", Color.FromHtml("#060509"), 1.2);
         inTween.TweenProperty(splash, "modulate", opaque, 1.55).SetDelay(0.2);
-=======
-        var inTween = CreateTween().SetTrans(Tween.TransitionType.Quad).SetParallel();
-        inTween.TweenProperty(background, "color", Color.FromHtml("#060509"), 1);
-        inTween.TweenProperty(progressLabel, "modulate", opaque, 0.5);
-        inTween.TweenProperty(progressBar, "modulate", opaque, 0.5);
-        inTween
-            .SetTrans(Tween.TransitionType.Quint)
-            .SetEase(Tween.EaseType.Out)
-            .TweenMethod(
-                Callable.From(
-                    (float shift) =>
-                    {
-                        splashMaterial.SetShaderParameter("shift", shift);
-                    }
-                ),
-                0.2,
-                1.0,
-                1.5
-            );
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
         return inTween;
     }
@@ -117,12 +83,8 @@ public partial class Loading : BaseScene
     private void exit()
     {
         var outTween = CreateTween().SetTrans(Tween.TransitionType.Quad).SetParallel();
-<<<<<<< HEAD
         outTween.TweenProperty(background, "color", Color.Color8(0, 0, 0), 0.4);
         outTween.TweenProperty(splash, "modulate", transparent, 0.4);
-=======
-        outTween.TweenProperty(background, "color", Color.Color8(0, 0, 0), 0.25);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         outTween
             .Chain()
             .TweenCallback(

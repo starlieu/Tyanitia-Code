@@ -115,7 +115,6 @@ public partial class MapList : Panel, ISkinnable
         scrollBar = GetNode<Panel>("ScrollBar");
         if (MobileUi.IsMobile)
         {
-<<<<<<< HEAD
             scrollBar.OffsetLeft = -56;
             scrollBar.MouseFilter = MouseFilterEnum.Stop;
             foreach (Control control in scrollBar.FindChildren("*", "Control", true, false).OfType<Control>())
@@ -137,12 +136,6 @@ public partial class MapList : Panel, ISkinnable
                 ScrollMomentum = 0;
                 if (input is InputEventScreenTouch or InputEventScreenDrag) GetViewport().SetInputAsHandled();
             };
-=======
-            scrollBar.OffsetLeft = -36;
-            scrollBar.MouseFilter = MouseFilterEnum.Ignore;
-            foreach (Control control in scrollBar.FindChildren("*", "Control", true, false).OfType<Control>())
-                control.MouseFilter = MouseFilterEnum.Ignore;
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         }
         scrollBarMain = scrollBar.GetNode<Panel>("Main");
         scrollBarMainTop = scrollBarMain.GetNode<TextureRect>("Top");
@@ -258,11 +251,7 @@ public partial class MapList : Panel, ISkinnable
 
         if (MobileUi.IsMobile && Size.Y > 0)
         {
-<<<<<<< HEAD
             float thumbHeight = Math.Min(Size.Y, Math.Max(128, (float)(Size.Y * Size.Y / (ScrollLength + Size.Y))));
-=======
-            float thumbHeight = Math.Min(Size.Y, Math.Max(96, (float)(Size.Y * Size.Y / (ScrollLength + Size.Y))));
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
             float maxThumbTop = 1 - thumbHeight / Size.Y;
             float scrollProgress = ScrollLength > 0 ? (float)Math.Clamp(TargetScroll / ScrollLength, 0, 1) : 0;
             scrollBarMain.AnchorTop = scrollProgress * maxThumbTop;

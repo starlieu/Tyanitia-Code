@@ -1,10 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
-<<<<<<< HEAD
 using System.Linq;
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 using Godot;
 
 public partial class MapInfoContainer : Panel, ISkinnable
@@ -120,7 +117,6 @@ public partial class MapInfoContainer : Panel, ISkinnable
     // Misc
 
     private ShaderMaterial outlineMaterial;
-<<<<<<< HEAD
     private Button compactFavorite;
     private Label compactTime;
     private HSlider compactSeek;
@@ -129,8 +125,6 @@ public partial class MapInfoContainer : Panel, ISkinnable
     private Label selectionTitle;
     private Label selectionSubtitle;
     private Label selectionStats;
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
     public override void _Ready()
     {
@@ -152,20 +146,7 @@ public partial class MapInfoContainer : Panel, ISkinnable
             OS.ShellShowInFileManager(exportFilePath);
         };
 
-<<<<<<< HEAD
         favoriteButton.Pressed += ToggleFavorite;
-=======
-        favoriteButton.Pressed += () =>
-        {
-            Map.Favorite = !Map.Favorite;
-            MapManager.Update(Map);
-
-            var skin = SkinManager.Instance.Skin;
-
-            favoriteButton.TooltipText = Map.Favorite ? "Unfavorite" : "Favorite";
-            favoriteButton.Icon = Map.Favorite ? skin.UnfavoriteButtonImage : skin.FavoriteButtonImage;
-        };
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
         //videoButton.Pressed += () =>
         //{
@@ -381,21 +362,15 @@ public partial class MapInfoContainer : Panel, ISkinnable
         SkinManager.Instance.Loaded += UpdateSkin;
 
         UpdateSkin();
-<<<<<<< HEAD
         BuildSelectionCard();
         BuildCompactActions();
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     }
 
     public override void _Process(double delta)
     {
         outlineMaterial?.SetShaderParameter("cursor_position", GetViewport().GetMousePosition());
-<<<<<<< HEAD
         if (selectionCoverStage != null && IsVisibleInTree())
             selectionCoverStage.Rotation = Mathf.Sin(Time.GetTicksMsec() * 0.00045f) * 0.048f;
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     }
 
     public override void _Input(InputEvent @event)
@@ -483,7 +458,6 @@ public partial class MapInfoContainer : Panel, ISkinnable
 
         coverBackground.SelfModulate = difficultyColor;
         cover.Texture = map.Cover;
-<<<<<<< HEAD
         if (selectionCover != null)
         {
             selectionCover.Texture = map.Cover;
@@ -498,10 +472,6 @@ public partial class MapInfoContainer : Panel, ISkinnable
             compactTime.Text = $"0:00  /  {Util.String.FormatTime(map.Length / 1000)}";
         if (compactSeek != null)
             compactSeek.SetValueNoSignal(0);
-=======
-        favoriteButton.TooltipText = map.Favorite ? "Unfavorite" : "Favorite";
-        favoriteButton.Icon = map.Favorite ? SkinManager.Instance.Skin.UnfavoriteButtonImage : SkinManager.Instance.Skin.FavoriteButtonImage;
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
 
         artistLink.Visible = map.ArtistLink != "";
         artistLink.Text = string.Format(CultureInfo.CurrentCulture, artistLinkFormat, map.ArtistPlatform);
@@ -584,7 +554,6 @@ public partial class MapInfoContainer : Panel, ISkinnable
         speedPresets.GetNode("PlusPlus").GetNode<SpeedPresetButton>("SpeedPresetButton").Icon = skin.SpeedPresetPlusPlusButtonImage;
     }
 
-<<<<<<< HEAD
     private void UpdateCompactFavorite()
     {
         if (compactFavorite == null || Map == null)
@@ -936,8 +905,6 @@ public partial class MapInfoContainer : Panel, ISkinnable
         button.AddThemeStyleboxOverride("hover_pressed", pressed);
     }
 
-=======
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
     private void toggleLeaderboard(bool show)
     {
         lbExpand.Visible = !show;
@@ -954,11 +921,7 @@ public partial class MapInfoContainer : Panel, ISkinnable
 
         Tween tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quart).SetParallel();
 
-<<<<<<< HEAD
         tween.TweenProperty(leaderboard, "offset_top", show ? -100 * Math.Min(4, Leaderboard.ScoreCount) : -68, 0.25);
-=======
-        tween.TweenProperty(leaderboard, "offset_top", -100 * (show ? Math.Min(4, Leaderboard.ScoreCount) : 1), 0.25);
->>>>>>> 99c9721a1ed81aa8725aacfa2eb4dbcf2dc4ab8d
         tween.TweenProperty(dim, "color", Color.Color8(0, 0, 0, (byte)(show ? 128 : 0)), 0.25);
 
         if (!show)
